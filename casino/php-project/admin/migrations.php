@@ -109,6 +109,43 @@ mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS kot_promo_act (
     KEY promo (promo_id)
 )");
 
+mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS wgc_games (
+    public_id VARCHAR(128) PRIMARY KEY,
+    universal_id VARCHAR(128) NOT NULL DEFAULT '',
+    name VARCHAR(255) NOT NULL DEFAULT '',
+    brand VARCHAR(128) NOT NULL DEFAULT '',
+    kind VARCHAR(32) NOT NULL DEFAULT '',
+    image TEXT,
+    demo TINYINT NOT NULL DEFAULT 0,
+    removed TINYINT NOT NULL DEFAULT 0,
+    sort INT NOT NULL DEFAULT 0,
+    seen_at DATETIME NULL,
+    updated_at DATETIME NULL,
+    KEY kind_brand (kind, brand)
+) DEFAULT CHARSET=utf8mb4");
+mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS wgc_meta (k VARCHAR(64) PRIMARY KEY, v TEXT) DEFAULT CHARSET=utf8mb4");
+mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS wgc_test_wallet (player_id VARCHAR(64) PRIMARY KEY, balance BIGINT NOT NULL)");
+mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS wgc_tx (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tx_id VARCHAR(64) NOT NULL UNIQUE,
+    user_id INT NOT NULL DEFAULT 0,
+    player_id VARCHAR(64) NOT NULL,
+    round_id VARCHAR(64) NOT NULL DEFAULT '',
+    game VARCHAR(128) NOT NULL DEFAULT '',
+    kind VARCHAR(16) NOT NULL DEFAULT 'play',
+    currency VARCHAR(8) NOT NULL DEFAULT '',
+    bet BIGINT NOT NULL DEFAULT 0,
+    win BIGINT NOT NULL DEFAULT 0,
+    booked TINYINT NOT NULL DEFAULT 0,
+    rolled_back TINYINT NOT NULL DEFAULT 0,
+    is_test TINYINT NOT NULL DEFAULT 0,
+    answer TEXT NULL,
+    created_at DATETIME NOT NULL,
+    rolled_back_at DATETIME NULL,
+    KEY user_time (user_id, created_at),
+    KEY round (round_id)
+) DEFAULT CHARSET=utf8mb4");
+
 echo "FastWin DB Migrations\n";
 echo str_repeat('-', 40)."\n";
 foreach ($migrations as [$label, $table, $column, $def]) {

@@ -339,3 +339,27 @@ html body #rb-brand { position: absolute !important; }
 body { padding-top: 60px !important; }
 html body #rb-brand { position: fixed !important; }
 .bw-orig-card { aspect-ratio: 3 / 4 !important; }
+
+/* WGC slot tiles: square, full image, no name overlay */
+.rb-wgc-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+.rb-wgc-card { aspect-ratio: 1 / 1 !important; border-radius: 12px !important; }
+.rb-wgc-card img { object-fit: contain !important; border-radius: 12px !important; background: #17151c; }
+/* Provider dropdown */
+.rb-prov { position: relative; margin-bottom: 12px; }
+.rb-prov-btn { width: 100%; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--rb-border, rgba(255,255,255,.12)); background: var(--rb-card, #17151c); color: #fff; font-size: 14px; cursor: pointer; text-align: left; }
+.rb-prov-btn b { color: #ff5c8a; }
+.rb-prov-arrow { margin-left: auto; transition: transform .2s; }
+.rb-prov.open .rb-prov-arrow { transform: rotate(180deg); }
+.rb-prov-panel { display: none; position: absolute; top: 50px; left: 0; right: 0; z-index: 50; background: #17151c; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 8px; box-shadow: 0 12px 30px rgba(0,0,0,.5); }
+.rb-prov.open .rb-prov-panel { display: block; }
+.rb-prov-search { width: 100%; height: 38px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); color: #fff; padding: 0 12px; margin-bottom: 6px; }
+.rb-prov-list { max-height: 320px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.rb-prov-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 8px; color: #fff !important; text-decoration: none !important; font-size: 14px; }
+.rb-prov-item small { opacity: .5; font-size: 12px; }
+.rb-prov-item:hover, .rb-prov-item.active { background: rgba(224,36,94,.18); }
+.rb-wgc-card { aspect-ratio: 3 / 4 !important; }
+.rb-wgc-card img { object-fit: cover !important; }
+/* full square art centred in a 3:4 card, blurred copy behind */
+.rb-wgc-card { position: relative; isolation: isolate; }
+.rb-wgc-card::before { content: ""; position: absolute; inset: -12px; background: var(--bg) center / cover no-repeat; filter: blur(14px) brightness(.55); z-index: -1; }
+.rb-wgc-card img { object-fit: contain !important; background: transparent !important; position: relative; }

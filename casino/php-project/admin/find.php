@@ -27,6 +27,8 @@ if ($qid !== '') {
             fn($r) => ['#' . $r['id'], 'Игрок #' . (int)$r['user_id'], number_format((float)$r['sum'], 2) . ' ₽ · ' . htmlspecialchars($r['ps']) . ' · ' . (['0' => 'ожидает', '1' => 'выплачен', '2' => 'отменён', '3' => 'отправляется'][$r['status']] ?? $r['status']), htmlspecialchars($r['date']), '/admin/withdraws?q=' . (int)$r['id']]],
         ['Активации промокодов', $find("SELECT id, user_id, code, amount, status, created_at FROM kot_promo_act WHERE id='$s' LIMIT 20"),
             fn($r) => ['#' . $r['id'], 'Игрок #' . (int)$r['user_id'], htmlspecialchars($r['code']) . ' · ' . (float)$r['amount'] . ' ₽ · ' . htmlspecialchars($r['status']), htmlspecialchars($r['created_at']), '/admin/promo?aq=' . (int)$r['id']]],
+        ['Транзакции слотов', $find("SELECT id, user_id, tx_id, round_id, game, bet, win, booked, rolled_back, created_at FROM wgc_tx WHERE id='$s' OR tx_id='$s' OR round_id='$s' LIMIT 20"),
+            fn($r) => ['#' . $r['id'], 'Игрок #' . (int)$r['user_id'], htmlspecialchars($r['game']) . ' · ставка ' . round($r['bet'] / 1e6, 2) . ' ₽ · выигрыш ' . round($r['win'] / 1e6, 2) . ' ₽' . ($r['rolled_back'] ? ' · откат' : ''), htmlspecialchars($r['created_at']), '/admin/slots?q=' . urlencode($r['tx_id'])]],
         ['Ставки', $find("SELECT id, user_id, sum, win_summa, game FROM kot_games WHERE id='$s' LIMIT 20"),
             fn($r) => ['#' . $r['id'], 'Игрок #' . (int)$r['user_id'], 'Ставка ' . (float)$r['sum'] . ' ₽ · выигрыш ' . (float)$r['win_summa'] . ' ₽', 'игра ' . htmlspecialchars($r['game']), '/admin/users?uid=' . (int)$r['user_id']]],
     ];

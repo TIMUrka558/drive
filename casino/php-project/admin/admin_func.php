@@ -180,6 +180,13 @@ elseif ($type === 'addPromo') {
     }
 }
 
+// ── WGC catalog sync ──────────────────────────────────────────────────────
+elseif ($type === 'wgcSync') {
+    require_once __DIR__ . '/../inc/wgc.php';
+    $r = wgc_sync(!empty($_POST['delta']));
+    $result = $r['ok'] ? ['success' => 'success', 'count' => $r['count']] : ['success' => 'error', 'error' => 'WGC: ' . $r['error']];
+}
+
 // ── Edit promo ────────────────────────────────────────────────────────────
 elseif ($type === 'editPromo') {
     $id    = (int)($_POST['id'] ?? 0);

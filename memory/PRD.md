@@ -49,3 +49,10 @@ Download zip from Google Drive, run the user's Replit project as-is (no rewrite)
 
 ## Iteration 8 (2026-11)
 - Home "Оригинальные игры" cards: new user images (images/game-{dice,x50,bubbles,mines}-v2.jpg, 640px), card aspect 3:4
+
+## Iteration 9 (2026-11) — WGC slots (World Gaming Connect)
+- inc/wgc.php (API client X-API-Key=WGC_API_KEY, catalog sync to wgc_games), wgc_wallet.php (Callback: getBalance/writeBet/rollback, HMAC SLOTS_API_SECRET, idempotent via wgc_tx, RUB only, test:true -> wgc_test_wallet sandbox, slot bets count to wager)
+- /slot catalog (search, brand filter, pages), /playslot?g=publicId (POST /v1/sessions, iframe), home popular slots from catalog (fallback static)
+- /admin/slots: key status, Callback URL, full/delta sync, tx log + search; find.php includes slot tx
+- Secrets: SLOTS_API_SECRET (Callback Secret, set), WGC_API_KEY (pending)
+- Note: PHP reads env from process (restart frontend after secrets change)

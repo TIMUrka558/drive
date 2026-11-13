@@ -115,6 +115,16 @@ setInterval(historys, 5000);
     <div class="bw-page-icon"><span class="material-icons">sports_esports</span></div>
     Популярные слоты
   </div>
+  <?php require_once __DIR__ . '/inc/wgc.php'; [$home_slots] = wgc_games(9); ?>
+  <?php if ($home_slots): ?>
+  <div class="bw-slot-grid rb-wgc-grid" data-testid="home-slots-grid">
+    <?php foreach ($home_slots as $s): ?>
+    <a href="/playslot?g=<?= urlencode($s['public_id']) ?>" class="bw-slot-card rb-wgc-card" style="text-decoration:none;--bg:url('<?= htmlspecialchars($s['image']) ?>')" title="<?= htmlspecialchars($s['name'] . ' · ' . $s['brand']) ?>">
+      <img src="<?= htmlspecialchars($s['image']) ?>" alt="<?= htmlspecialchars($s['name']) ?>" loading="lazy">
+    </a>
+    <?php endforeach; ?>
+  </div>
+  <?php else: ?>
   <div class="bw-slot-grid">
     <a href="/game/1" style="text-decoration:none;" class="bw-slot-card">
       <img src="/slots_materials/TheDogHouseMegaways.svg" alt="The Dog House">
@@ -133,6 +143,7 @@ setInterval(historys, 5000);
       <div class="bw-slot-name"><p>Sugar Rush</p><span class="bw-slot-provider">Pragmatic</span></div>
     </a>
   </div>
+  <?php endif; ?>
   <a href="/slot" class="bw-btn bw-btn-secondary bw-btn-full" style="margin-top:8px;">
     <span class="material-icons">apps</span> Все слоты
   </a>
