@@ -43,3 +43,6 @@ Download zip from Google Drive, run the user's Replit project as-is (no rewrite)
 - Deposit promos: kot_promo.min_dep; type "deposit" with min_dep>0 activates only if player has a single deposit >= min_dep in last 24h (kot_payments, both date formats)
 - Admin promo edit (editPromo): limit, wager ×, expiry, min deposit — without deleting
 - Profile: copy-ID button (clipboard + fallback)
+
+## Iteration 7 (2026-11)
+- Top bar (#shoooowd + #rb-brand logo) fixed on scroll on all pages (css/rubin-theme.css, body padding-top 60px)
