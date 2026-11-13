@@ -93,6 +93,7 @@ function wgc_games(int $limit, int $offset = 0, string $search = '', string $bra
     $q = mysql_query("SELECT public_id, name, brand, image FROM wgc_games WHERE $where ORDER BY sort DESC, name LIMIT " . (int)$offset . ", " . (int)$limit);
     $out = [];
     while ($q && $r = mysql_fetch_assoc($q)) {
+        if (strpos((string)$r['image'], '/placeholder/') === false) $r['image'] = str_replace('/square/300x300.', '/portrait/300x400.', (string)$r['image']);
         $out[] = $r;
     }
     return [$out, $total];

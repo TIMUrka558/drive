@@ -367,3 +367,7 @@ html body #rb-brand { position: fixed !important; }
 .rb-wgc-card { aspect-ratio: auto !important; background: transparent !important; border: 0 !important; box-shadow: none !important; }
 .rb-wgc-card::before { content: none !important; }
 .rb-wgc-card img { width: 100% !important; height: auto !important; object-fit: initial !important; position: static !important; }
+/* WGC tiles: vertical 3:4 provider art, shown whole */
+.rb-wgc-card { aspect-ratio: 3 / 4 !important; }
+.rb-wgc-card img { height: 100% !important; object-fit: cover !important; }
+.rb-wgc-card img[src*="/placeholder/"] { object-fit: contain !important; }
