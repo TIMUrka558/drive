@@ -34,9 +34,9 @@ $st_label = ['active' => 'Отыгрывается', 'done' => 'Отыгран',
 <div class="aw-table-wrap" style="margin-bottom:20px">
   <div class="tw-head"><h2>Все промокоды (<?= count($promos) ?>)</h2></div>
   <table class="aw-table" data-testid="promo-table">
-    <tr><th>ID</th><th>Код</th><th>Тип</th><th>Сумма</th><th>Вагер ×</th><th>Активировано</th><th>Лимит</th><th>Действует до</th><th></th></tr>
+    <tr><th>ID</th><th>Код</th><th>Тип</th><th>Сумма</th><th>Вагер ×</th><th>Мин. депозит</th><th>Активировано</th><th>Лимит</th><th>Действует до</th><th></th></tr>
     <?php if (empty($promos)): ?>
-    <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">Промокодов пока нет</td></tr>
+    <tr><td colspan="10" style="text-align:center;color:var(--muted);padding:24px">Промокодов пока нет</td></tr>
     <?php else: foreach ($promos as $p): ?>
     <tr data-testid="promo-row-<?= (int)$p['id'] ?>">
       <td style="color:var(--muted)">#<?= (int)$p['id'] ?></td>
@@ -54,11 +54,16 @@ $st_label = ['active' => 'Отыгрывается', 'done' => 'Отыгран',
         <?php endif ?>
       </td>
       <td>×<?= (int)($p['wager_mult'] ?? 1) ?></td>
+      <td><?= ($p['promo_type'] ?? 'deposit') === 'deposit' && (float)$p['min_dep'] > 0 ? number_format((float)$p['min_dep'], 2) . ' ₽' : '—' ?></td>
       <td><?= (int)$p['actived'] ?></td>
       <td><?= (int)$p['active'] > 0 ? (int)$p['active'] : '∞' ?></td>
       <td style="color:var(--muted);font-size:12px"><?= $p['expires_at'] ? htmlspecialchars($p['expires_at']) : '—' ?></td>
       <td>
+        <div style="display:flex;gap:4px">
+        <button class="btn btn-ghost btn-sm" data-testid="promo-edit-<?= (int)$p['id'] ?>"
+                onclick='openEdit(<?= json_encode(['id' => (int)$p['id'], 'name' => $p['name'], 'limit' => (int)$p['active'], 'wager' => (int)($p['wager_mult'] ?? 1), 'min_dep' => (float)$p['min_dep'], 'exp' => (string)$p['expires_at'], 'type' => $p['promo_type'] ?? 'deposit'], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG) ?>)'>Изменить</button>
         <button class="btn btn-danger btn-sm" data-testid="promo-delete-<?= (int)$p['id'] ?>" onclick="deletePromo(<?= (int)$p['id'] ?>)">Удалить</button>
+        </div>
       </td>
     </tr>
     <?php endforeach; endif ?>
@@ -140,6 +145,10 @@ $st_label = ['active' => 'Отыгрывается', 'done' => 'Отыгран',
         <label>Действует до (пусто = бессрочно)</label>
         <input type="date" id="pm_expires" class="form-control" data-testid="pm-expires">
       </div>
+      <div class="form-group" id="pm_mindep_wrap">
+        <label>Мин. депозит за 24 ч, ₽ (0 = без условия)</label>
+        <input type="number" id="pm_mindep" class="form-control" data-testid="pm-min-dep" value="0" step="0.01" min="0">
+      </div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost"
@@ -149,7 +158,69 @@ $st_label = ['active' => 'Отыгрывается', 'done' => 'Отыгран',
   </div>
 </div>
 
+<!-- Edit Promo Modal -->
+<div class="aw-modal-bg" id="editPromoModal">
+  <div class="aw-modal">
+    <h2>Изменить промокод <span id="ed_name" style="font-family:monospace"></span></h2>
+    <input type="hidden" id="ed_id">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Количество активаций (0 = без лимита)</label>
+        <input type="number" id="ed_limit" class="form-control" data-testid="ed-limit" min="0">
+      </div>
+      <div class="form-group">
+        <label>Вагер (×)</label>
+        <input type="number" id="ed_wager" class="form-control" data-testid="ed-wager" min="1" max="100">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Действует до (пусто = бессрочно)</label>
+        <input type="date" id="ed_expires" class="form-control" data-testid="ed-expires">
+      </div>
+      <div class="form-group" id="ed_mindep_wrap">
+        <label>Мин. депозит за 24 ч, ₽ (0 = без условия)</label>
+        <input type="number" id="ed_mindep" class="form-control" data-testid="ed-min-dep" step="0.01" min="0">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="document.getElementById('editPromoModal').classList.remove('open')">Отмена</button>
+      <button class="btn btn-primary" data-testid="ed-save-btn" onclick="savePromo()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
 <script>
+function toggleMinDep() {
+  document.getElementById('pm_mindep_wrap').style.display = document.getElementById('pm_type').value === 'deposit' ? '' : 'none';
+}
+document.getElementById('pm_type').addEventListener('change', toggleMinDep);
+function openEdit(p) {
+  document.getElementById('ed_id').value = p.id;
+  document.getElementById('ed_name').textContent = p.name;
+  document.getElementById('ed_limit').value = p.limit;
+  document.getElementById('ed_wager').value = p.wager;
+  document.getElementById('ed_mindep').value = p.min_dep;
+  document.getElementById('ed_expires').value = /^\d{4}-\d{2}-\d{2}$/.test(p.exp) ? p.exp : '';
+  document.getElementById('ed_mindep_wrap').style.display = p.type === 'deposit' ? '' : 'none';
+  document.getElementById('editPromoModal').classList.add('open');
+}
+function savePromo() {
+  bwPost({
+    type: 'editPromo',
+    id: document.getElementById('ed_id').value,
+    max_uses: document.getElementById('ed_limit').value,
+    wager_mult: document.getElementById('ed_wager').value,
+    min_dep: document.getElementById('ed_mindep').value,
+    expires_at: document.getElementById('ed_expires').value
+  }).then(d => {
+    if (d.success === 'success') { bwAlert('Сохранено', 'success'); setTimeout(() => location.reload(), 800); }
+    else bwAlert(d.error || 'Ошибка', 'error');
+  }).catch(() => bwAlert('Ошибка запроса', 'error'));
+}
+document.getElementById('editPromoModal').addEventListener('click', function (e) {
+  if (e.target === this) this.classList.remove('open');
+});
 function bwAlert(msg, type) {
   var el = document.getElementById('promoAlert');
   el.textContent = msg;
@@ -168,7 +239,8 @@ function addPromo() {
     max_amount: document.getElementById('pm_max').value,
     wager_mult: document.getElementById('pm_wager').value,
     max_uses: document.getElementById('pm_limit').value,
-    expires_at: document.getElementById('pm_expires').value
+    expires_at: document.getElementById('pm_expires').value,
+    min_dep: document.getElementById('pm_type').value === 'deposit' ? document.getElementById('pm_mindep').value : 0
   }).then(d => {
     if (d.success === 'success') {
       bwAlert('Промокод создан', 'success');

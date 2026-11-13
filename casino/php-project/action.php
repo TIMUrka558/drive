@@ -2240,6 +2240,7 @@ if($type == "activePromo") {
             elseif ($limit > 0 && (int)$p['actived'] >= $limit) $mess = "Активации закончились";
             elseif ((int)$used['c'] > 0 || preg_match("/(^| )$uid /", (string)$p['id_active'])) $mess = "Вы уже активировали этот код";
             elseif ((int)$day['c'] >= 3) $mess = "Можно активировать не больше 3 промокодов за 24 часа";
+            elseif (($p['promo_type'] ?? '') === 'deposit' && (float)$p['min_dep'] > 0 && !mysql_fetch_array(mysql_query("SELECT id FROM kot_payments WHERE user_id=$uid AND CAST(suma AS DECIMAL(12,2)) >= " . (float)$p['min_dep'] . " AND COALESCE(STR_TO_DATE(data, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(data, '%d.%m.%Y %H:%i')) > NOW() - INTERVAL 1 DAY LIMIT 1"))) $mess = "Этот промокод работает после пополнения от " . (float)$p['min_dep'] . " ₽ за последние 24 часа";
             else {
                 $minA = (float)$p['min_amount']; $maxA = (float)$p['max_amount'];
                 $amount = ($minA > 0 && $maxA >= $minA) ? random_int((int)round($minA * 100), (int)round($maxA * 100)) / 100 : round((float)$p['sum'], 2);

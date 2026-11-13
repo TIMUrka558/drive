@@ -38,3 +38,8 @@ Download zip from Google Drive, run the user's Replit project as-is (no rewrite)
 - Profile /me: player ID shown, active wager card (progress, promos) + "Отменить бонус и вагер" (payapi cancelWager, allowed when balance < 1 ₽; zeroes wager & balance)
 - Withdraw blocked while wager not completed (payapi withdraw + legacy withdrawuser)
 - Admin: promo page in Russian with activations log + search; new /admin/find global search by ID (players, deposits, invoices, withdrawals, promo activations, bets); deposits/withdrawals searchable by record ID; player page shows promo activations and bet IDs
+
+## Iteration 6 (2026-11)
+- Deposit promos: kot_promo.min_dep; type "deposit" with min_dep>0 activates only if player has a single deposit >= min_dep in last 24h (kot_payments, both date formats)
+- Admin promo edit (editPromo): limit, wager ×, expiry, min deposit — without deleting
+- Profile: copy-ID button (clipboard + fallback)

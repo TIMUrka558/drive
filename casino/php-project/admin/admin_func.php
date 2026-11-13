@@ -158,6 +158,7 @@ elseif ($type === 'addPromo') {
     $wager = max(1, (int)($_POST['wager_mult'] ?? 1));
     $limit = max(0, (int)($_POST['max_uses']   ?? 0));
     $exp   = esc($__conn, trim($_POST['expires_at'] ?? ''));
+    $minD  = round(max(0, (float)($_POST['min_dep'] ?? 0)), 2);
     $date  = esc($__conn, date('d.m.Y H:i:s'));
 
     if (!$code) {
@@ -170,12 +171,28 @@ elseif ($type === 'addPromo') {
             q($__conn,
                 "INSERT INTO kot_promo
                      (date, is_admin, name, sum, active, actived, id_active,
-                      wager_mult, promo_type, min_amount, max_amount, expires_at)
+                      wager_mult, promo_type, min_amount, max_amount, expires_at, min_dep)
                  VALUES
                      ('$date', 1, '$code', '$sum', '$limit', 0, 0,
-                      $wager, '$ptype', '$minA', '$maxA', '$exp')");
+                      $wager, '$ptype', '$minA', '$maxA', '$exp', '$minD')");
             $result = ['success' => 'success'];
         }
+    }
+}
+
+// ── Edit promo ────────────────────────────────────────────────────────────
+elseif ($type === 'editPromo') {
+    $id    = (int)($_POST['id'] ?? 0);
+    $limit = max(0, (int)($_POST['max_uses'] ?? 0));
+    $wager = max(1, (int)($_POST['wager_mult'] ?? 1));
+    $minD  = round(max(0, (float)($_POST['min_dep'] ?? 0)), 2);
+    $exp   = trim($_POST['expires_at'] ?? '');
+    if ($exp !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $exp)) {
+        $result = ['success' => 'error', 'error' => 'Неверная дата'];
+    } else {
+        $exp = esc($__conn, $exp);
+        q($__conn, "UPDATE kot_promo SET active='$limit', wager_mult=$wager, min_dep='$minD', expires_at='$exp' WHERE id=$id");
+        $result = ['success' => 'success'];
     }
 }
 

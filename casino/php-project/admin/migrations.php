@@ -92,6 +92,7 @@ $migrations = [
     ['kot_promo.promo_type', 'kot_promo','promo_type', "VARCHAR(20) NOT NULL DEFAULT 'deposit'"],
     ['kot_promo.min_amount', 'kot_promo','min_amount', 'DECIMAL(10,2) NOT NULL DEFAULT 0'],
     ['kot_promo.max_amount', 'kot_promo','max_amount', 'DECIMAL(10,2) NOT NULL DEFAULT 0'],
+    ['kot_promo.min_dep',    'kot_promo','min_dep',    'DECIMAL(12,2) NOT NULL DEFAULT 0'],
     ['kot_promo.expires_at', 'kot_promo','expires_at', "VARCHAR(50) NOT NULL DEFAULT ''"],
 ];
 

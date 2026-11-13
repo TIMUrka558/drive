@@ -84,7 +84,11 @@ function sendMesSupport() {
     <div id="bw-ava-msg" style="font-size:11px;color:#9ca3af;margin-top:4px;font-family:'Inter',sans-serif;display:none;">Загрузка...</div>
     <div class="bw-profile-name"><?=$login?></div>
     <div class="bw-profile-since">На сайте с <?=$regdate?></div>
-    <div class="bw-profile-since" data-testid="profile-user-id">Ваш ID: <b style="color:#fff">#<?=(int)$id?></b></div>
+    <div class="bw-profile-since" data-testid="profile-user-id" style="display:inline-flex;align-items:center;gap:6px;">Ваш ID: <b style="color:#fff">#<?=(int)$id?></b>
+      <button type="button" data-testid="profile-copy-id-btn" onclick="bwCopyId(this)" title="Скопировать ID" style="background:rgba(255,255,255,.12);border:0;border-radius:8px;color:#fff;padding:3px 8px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-size:11px;">
+        <span class="material-icons" style="font-size:14px;">content_copy</span><span class="bw-copy-label">Копировать</span>
+      </button>
+    </div>
     <div class="bw-profile-actions">
       <a href="/deposit" class="bw-btn bw-btn-primary bw-btn-sm">
         <span class="material-icons" style="font-size:16px;">account_balance_wallet</span>
@@ -227,6 +231,14 @@ require ("components/footer.php");
 ?>
 <script>
 history.pushState(null, null, window.location.pathname.split("?")[0]);
+
+function bwCopyId(btn) {
+  var text = '<?=(int)$id?>';
+  var done = function() { var l = btn.querySelector('.bw-copy-label'); l.textContent = 'Скопировано'; setTimeout(function(){ l.textContent = 'Копировать'; }, 1500); };
+  var legacy = function() { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(t); done(); };
+  if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done, legacy); return; }
+  legacy();
+}
 
 function bwCancelWager() {
   if (!confirm('Отменить бонус и вагер? Остаток баланса меньше 1 ₽ будет списан.')) return;
