@@ -2229,7 +2229,39 @@ if($type == "activePromo") {
         $uid = (int)$u['id'];
         $balance = $u['balance'];
         $p = mysql_fetch_array(mysql_query("SELECT * FROM kot_promo WHERE name='$code' LIMIT 1"));
-        if (!$p) $mess = "Промокод не найден";
+        $fp = $p ? null : mysql_fetch_array(mysql_query("SELECT * FROM wgc_fs_promo WHERE code='$code' LIMIT 1"));
+        $dayAll = (int)mysql_fetch_array(mysql_query("SELECT (SELECT COUNT(*) FROM kot_promo_act WHERE user_id=$uid AND created_at > NOW() - INTERVAL 1 DAY) + (SELECT COUNT(*) FROM wgc_fs_grant WHERE user_id=$uid AND status<>'failed' AND created_at > NOW() - INTERVAL 1 DAY) c"))['c'];
+        if ($fp) {
+            require_once __DIR__ . '/inc/wgc.php';
+            $fid = (int)$fp['id'];
+            $usedFs = mysql_fetch_array(mysql_query("SELECT COUNT(*) c FROM wgc_fs_grant WHERE user_id=$uid AND promo_id=$fid AND status<>'failed'"));
+            if ($fp['expires_at'] !== '' && strtotime($fp['expires_at'] . ' 23:59:59') < time()) $mess = "Срок действия промокода истёк";
+            elseif ((int)$fp['max_uses'] > 0 && (int)$fp['used'] >= (int)$fp['max_uses']) $mess = "Активации закончились";
+            elseif ((int)$usedFs['c'] > 0) $mess = "Вы уже активировали этот код";
+            elseif ($dayAll >= 3) $mess = "Можно активировать не больше 3 промокодов за 24 часа";
+            else {
+                mysql_query("UPDATE wgc_fs_promo SET used = used + 1 WHERE id=$fid AND (max_uses = 0 OR used < max_uses)");
+                if (mysql_affected_rows() < 1) $mess = "Активации закончились";
+                else {
+                    $g = wgc_fs_grant($fp['public_id'], $uid, (int)$fp['spins'], (float)$fp['bet']);
+                    $pidE = mysql_real_escape_string($fp['public_id']);
+                    $sp = (int)$fp['spins']; $bt = (float)$fp['bet']; $wm = (int)$fp['wager_mult'];
+                    if ($g['ok']) {
+                        $fsid = mysql_real_escape_string($g['id']);
+                        mysql_query("INSERT INTO wgc_fs_grant (promo_id, user_id, freespin_id, public_id, spins, bet, wager_mult, status, created_at) VALUES ($fid, $uid, " . ($fsid !== '' ? "'$fsid'" : "NULL") . ", '$pidE', $sp, '$bt', $wm, 'active', NOW())");
+                        $fa = "success";
+                        $mess = "Начислено $sp фриспинов в " . $fp['game_name'];
+                        $newbalance = $balance;
+                    } else {
+                        mysql_query("UPDATE wgc_fs_promo SET used = used - 1 WHERE id=$fid");
+                        $er = mysql_real_escape_string(substr($g['code'] . ' ' . $g['message'], 0, 250));
+                        mysql_query("INSERT INTO wgc_fs_grant (promo_id, user_id, public_id, spins, bet, wager_mult, status, error, created_at) VALUES ($fid, $uid, '$pidE', $sp, '$bt', $wm, 'failed', '$er', NOW())");
+                        $mess = wgc_fs_error_text($g['code']);
+                    }
+                }
+            }
+        }
+        elseif (!$p) $mess = "Промокод не найден";
         else {
             $pid = (int)$p['id'];
             $limit = (int)$p['active'];
@@ -2239,7 +2271,7 @@ if($type == "activePromo") {
             if ($exp !== '' && strtotime($exp . ' 23:59:59') < time()) $mess = "Срок действия промокода истёк";
             elseif ($limit > 0 && (int)$p['actived'] >= $limit) $mess = "Активации закончились";
             elseif ((int)$used['c'] > 0 || preg_match("/(^| )$uid /", (string)$p['id_active'])) $mess = "Вы уже активировали этот код";
-            elseif ((int)$day['c'] >= 3) $mess = "Можно активировать не больше 3 промокодов за 24 часа";
+            elseif ($dayAll >= 3) $mess = "Можно активировать не больше 3 промокодов за 24 часа";
             elseif (($p['promo_type'] ?? '') === 'deposit' && (float)$p['min_dep'] > 0 && !mysql_fetch_array(mysql_query("SELECT id FROM kot_payments WHERE user_id=$uid AND CAST(suma AS DECIMAL(12,2)) >= " . (float)$p['min_dep'] . " AND COALESCE(STR_TO_DATE(data, '%d.%m.%Y %H:%i:%s'), STR_TO_DATE(data, '%d.%m.%Y %H:%i')) > NOW() - INTERVAL 1 DAY LIMIT 1"))) $mess = "Этот промокод работает после пополнения от " . (float)$p['min_dep'] . " ₽ за последние 24 часа";
             else {
                 $minA = (float)$p['min_amount']; $maxA = (float)$p['max_amount'];

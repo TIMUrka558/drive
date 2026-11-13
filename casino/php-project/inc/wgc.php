@@ -67,10 +67,11 @@ function wgc_sync(bool $delta = false): array {
             $e = fn($v) => mysql_real_escape_string((string)$v);
             $removed = !empty($g['removed']) ? 1 : 0;
             $demo = !empty($g['demoSupported']) ? 1 : 0;
-            mysql_query("INSERT INTO wgc_games (public_id, universal_id, name, brand, kind, image, demo, removed, seen_at, updated_at)
-                VALUES ('{$e($g['publicId'])}', '{$e($g['universalId'] ?? '')}', '{$e($g['name'] ?? '')}', '{$e($g['brand'] ?? '')}', '{$e($g['kind'] ?? '')}', '{$e($g['image'] ?? '')}', $demo, $removed, '$run', NOW())
+            $fs = !empty($g['capabilities']['freespins']) ? 1 : 0;
+            mysql_query("INSERT INTO wgc_games (public_id, universal_id, name, brand, kind, image, demo, fs, removed, seen_at, updated_at)
+                VALUES ('{$e($g['publicId'])}', '{$e($g['universalId'] ?? '')}', '{$e($g['name'] ?? '')}', '{$e($g['brand'] ?? '')}', '{$e($g['kind'] ?? '')}', '{$e($g['image'] ?? '')}', $demo, $fs, $removed, '$run', NOW())
                 ON DUPLICATE KEY UPDATE universal_id=VALUES(universal_id), name=VALUES(name), brand=VALUES(brand), kind=VALUES(kind),
-                image=VALUES(image), demo=VALUES(demo), removed=VALUES(removed), seen_at=VALUES(seen_at), updated_at=NOW()");
+                image=VALUES(image), demo=VALUES(demo), fs=VALUES(fs), removed=VALUES(removed), seen_at=VALUES(seen_at), updated_at=NOW()");
             $n++;
         }
         $pages = (int)($d['pageCount'] ?? 1);
@@ -110,4 +111,23 @@ function wgc_rank(): void {
     mysql_query("UPDATE wgc_games SET sort = 10 WHERE brand IN (" . $e($brands) . ")");
     mysql_query("UPDATE wgc_games SET sort = 100 - FIELD(universal_id, " . $e($hits) . ") WHERE universal_id IN (" . $e($hits) . ")");
     mysql_query("UPDATE wgc_games SET sort = -100 WHERE image LIKE '%/placeholder/%' OR image = ''");
+}
+
+// Free spins: grant a WGC bonus for a player (body fields per backoffice: game, player, currency, count, bet per spin).
+function wgc_fs_grant(string $publicId, int $uid, int $spins, float $bet): array {
+    [$code, $res] = wgc_api('POST', '/v1/freespins', [
+        'publicId' => $publicId, 'playerId' => wgc_player_id($uid), 'currency' => WGC_CURRENCY,
+        'count' => $spins, 'bet' => $bet,
+    ], bin2hex(random_bytes(16)));
+    if (!empty($res['ok'])) return ['ok' => true, 'id' => (string)($res['data']['id'] ?? $res['data']['freespinId'] ?? '')];
+    $c = $res['error']['code'] ?? 'error';
+    $m = $res['error']['message'] ?? '';
+    if ($code === 404 && $c === 'not_found' && stripos($m, 'endpoint') !== false) $c = 'fs_api_disabled';
+    return ['ok' => false, 'code' => $c, 'message' => $m];
+}
+function wgc_fs_error_text(string $c): string {
+    return ['fs_api_disabled' => 'Фриспины временно недоступны', 'freespins_active' => 'У вас уже есть фриспины в этой игре',
+        'freespins_limit' => 'У вас уже 3 активных пакета фриспинов', 'freespins_not_supported' => 'Игра не поддерживает фриспины',
+        'bet_out_of_range' => 'Ставка за спин вне лимитов', 'credit_limit' => 'Фриспины временно недоступны',
+        'player_blocked' => 'Игры недоступны для вашего аккаунта'][$c] ?? 'Не удалось начислить фриспины';
 }

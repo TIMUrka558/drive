@@ -34,6 +34,7 @@ $nav = [
     ['href' => '/admin/stat',      'icon' => '📈', 'label' => 'Статистика'],
     ['href' => '/admin/rtp',       'icon' => '🎰', 'label' => 'Игры / RTP'],
     ['href' => '/admin/slots',     'icon' => '🎰', 'label' => 'Слоты (WGC)'],
+    ['href' => '/admin/slotpromo', 'icon' => '🎡', 'label' => 'Промо на слоты'],
     ['href' => '/admin/promo',     'icon' => '🎁', 'label' => 'Промокоды'],
     ['href' => '/admin/withdraws', 'icon' => '💸', 'label' => 'Выводы'],
     ['href' => '/admin/deps',      'icon' => '💰', 'label' => 'Депозиты'],

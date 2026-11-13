@@ -36,6 +36,7 @@ $wg_req = (float)$wg['wager_required'];
 $wg_prog = min($wg_req, (float)$wg['wager_progress']);
 $wg_pct = $wg_req > 0 ? round($wg_prog / $wg_req * 100) : 0;
 $wg_can_cancel = $wg_req > 0 && (float)$wg['balance'] < 1;
+$fs_grants = mysql_query("SELECT g.id, g.public_id, g.spins, g.bet, g.win_total, w.name FROM wgc_fs_grant g LEFT JOIN wgc_games w ON w.public_id=g.public_id WHERE g.user_id='$id' AND g.status='active' ORDER BY g.id DESC LIMIT 5");
 $wg_promos = mysql_query("SELECT id, code, amount, wager, created_at FROM kot_promo_act WHERE user_id='$id' AND status='active' ORDER BY id DESC");
 ?>
 <script>
@@ -104,6 +105,18 @@ function sendMesSupport() {
       </a>
     </div>
   </div>
+
+  <?php if ($fs_grants && mysql_num_rows($fs_grants) > 0): ?>
+  <div class="bw-section-title">Мои фриспины</div>
+  <div class="bw-card" data-testid="profile-freespins" style="padding:12px 16px;">
+    <?php while ($fg = mysql_fetch_assoc($fs_grants)): ?>
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;">
+      <div style="flex:1;font-size:13px;"><b><?=(int)$fg['spins']?> фриспинов</b> в <?=htmlspecialchars($fg['name'] ?: $fg['public_id'])?> · ставка <?=(float)$fg['bet']?> ₽<br><span style="color:var(--muted);font-size:12px;">Выигрыш: <?=number_format($fg['win_total'] / 1000000, 2)?> ₽ · ID #<?=(int)$fg['id']?></span></div>
+      <a href="/playslot?g=<?=urlencode($fg['public_id'])?>" class="bw-btn bw-btn-primary bw-btn-sm" data-testid="profile-freespins-play">Играть</a>
+    </div>
+    <?php endwhile; ?>
+  </div>
+  <?php endif; ?>
 
   <?php if ($wg_req > 0): ?>
   <!-- Вагер -->

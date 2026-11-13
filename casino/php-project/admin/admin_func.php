@@ -187,6 +187,52 @@ elseif ($type === 'wgcSync') {
     $result = $r['ok'] ? ['success' => 'success', 'count' => $r['count']] : ['success' => 'error', 'error' => 'WGC: ' . $r['error']];
 }
 
+// ── Slot free-spin promos ─────────────────────────────────────────────────
+elseif ($type === 'wgcGameSearch') {
+    require_once __DIR__ . '/../inc/wgc.php';
+    $s = esc($__conn, trim($_POST['q'] ?? ''));
+    $items = [];
+    $r = q($__conn, "SELECT public_id, name, brand, image FROM wgc_games WHERE removed=0 AND fs=1 AND (name LIKE '%$s%' OR public_id LIKE '%$s%') ORDER BY sort DESC, name LIMIT 20");
+    while ($r && $row = mysqli_fetch_assoc($r)) $items[] = $row;
+    $result = ['success' => 'success', 'items' => $items];
+}
+elseif ($type === 'addFsPromo') {
+    $code  = esc($__conn, strtoupper(trim($_POST['code'] ?? '')));
+    $gid   = esc($__conn, trim($_POST['public_id'] ?? ''));
+    $spins = (int)($_POST['spins'] ?? 0);
+    $bet   = round((float)($_POST['bet'] ?? 0), 2);
+    $wager = max(1, (int)($_POST['wager_mult'] ?? 1));
+    $limit = max(0, (int)($_POST['max_uses'] ?? 0));
+    $exp   = trim($_POST['expires_at'] ?? '');
+    $game  = $gid !== '' ? mysqli_fetch_assoc(q($__conn, "SELECT name FROM wgc_games WHERE public_id='$gid' AND fs=1")) : null;
+    $dup   = $code !== '' && (mysqli_fetch_assoc(q($__conn, "SELECT id FROM kot_promo WHERE name='$code'")) || mysqli_fetch_assoc(q($__conn, "SELECT id FROM wgc_fs_promo WHERE code='$code'")));
+    if ($code === '') $result = ['success' => 'error', 'error' => 'Введите код'];
+    elseif (!$game) $result = ['success' => 'error', 'error' => 'Выберите слот из списка'];
+    elseif ($spins < 1 || $spins > 500) $result = ['success' => 'error', 'error' => 'Количество спинов: от 1 до 500'];
+    elseif ($bet <= 0) $result = ['success' => 'error', 'error' => 'Укажите ставку за спин'];
+    elseif ($exp !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $exp)) $result = ['success' => 'error', 'error' => 'Неверная дата'];
+    elseif ($dup) $result = ['success' => 'error', 'error' => 'Такой код уже есть'];
+    else {
+        $gn = esc($__conn, $game['name']); $exp = esc($__conn, $exp);
+        q($__conn, "INSERT INTO wgc_fs_promo (code, public_id, game_name, spins, bet, wager_mult, max_uses, expires_at, created_at) VALUES ('$code', '$gid', '$gn', $spins, '$bet', $wager, $limit, '$exp', NOW())");
+        $result = ['success' => 'success'];
+    }
+}
+elseif ($type === 'deleteFsPromo') {
+    q($__conn, "DELETE FROM wgc_fs_promo WHERE id=" . (int)($_POST['id'] ?? 0));
+    $result = ['success' => 'success'];
+}
+elseif ($type === 'removeFsGrant') {
+    require_once __DIR__ . '/../inc/wgc.php';
+    $g = mysqli_fetch_assoc(q($__conn, "SELECT * FROM wgc_fs_grant WHERE id=" . (int)($_POST['id'] ?? 0)));
+    if (!$g || !$g['freespin_id']) $result = ['success' => 'error', 'error' => 'Нет ID фриспинов WGC'];
+    else {
+        [$c, $r] = wgc_api('DELETE', '/v1/freespins/' . rawurlencode($g['freespin_id']));
+        if (!empty($r['ok'])) { q($__conn, "UPDATE wgc_fs_grant SET status='removed' WHERE id=" . (int)$g['id']); $result = ['success' => 'success']; }
+        else $result = ['success' => 'error', 'error' => 'WGC: ' . ($r['error']['code'] ?? 'error') . ' ' . ($r['error']['message'] ?? '')];
+    }
+}
+
 // ── Edit promo ────────────────────────────────────────────────────────────
 elseif ($type === 'editPromo') {
     $id    = (int)($_POST['id'] ?? 0);

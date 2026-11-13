@@ -72,6 +72,7 @@ $saveBalance = function (int $bal) use ($db, $isTest, $pid, $uid): void {
 };
 
 $track = null;
+$fsWin = null;
 $db->begin_transaction();
 try {
     $w = $lockBalance();
@@ -102,6 +103,7 @@ try {
                 $saveBalance($bal);
                 $ans = ['ok' => true, 'balance' => money($bal)];
                 if (!$isTest && $bet > 0) $track = [$uid, $bet / 1000000, $win / 1000000];
+                if (!$isTest && $win > 0 && isset($b['freespinId']) && is_string($b['freespinId'])) $fsWin = [$b['freespinId'], $win];
             }
             $ok = $ans['ok'] === true;
             $bk = $ok ? $bet : 0; $wk = $ok ? $win : 0; $booked = $ok ? 1 : 0; $t = $isTest ? 1 : 0;
@@ -135,6 +137,22 @@ try {
     wreply(500, ['ok' => false, 'error' => 'server_error']);
 }
 
+if ($fsWin) {
+    // Free-spin winnings: wager = win × promo multiplier.
+    try {
+        $gp = (string)($b['gamePublicId'] ?? '');
+        $st = $db->prepare("SELECT id, wager_mult FROM wgc_fs_grant WHERE user_id=? AND (freespin_id=? OR (freespin_id IS NULL AND public_id=? AND status='active')) ORDER BY (freespin_id=?) DESC, id DESC LIMIT 1");
+        $st->bind_param('isss', $uid, $fsWin[0], $gp, $fsWin[0]); $st->execute();
+        $gr = $st->get_result()->fetch_assoc();
+        if ($gr) {
+            $wg = round($fsWin[1] / 1000000 * max(1, (int)$gr['wager_mult']), 2);
+            $db->query("UPDATE kot_user SET wager_required = wager_required + $wg WHERE id=" . (int)$uid);
+            $st = $db->prepare("UPDATE wgc_fs_grant SET win_total = win_total + ?, freespin_id = COALESCE(freespin_id, ?) WHERE id=?");
+            $gid = (int)$gr['id']; $wv = (int)$fsWin[1];
+            $st->bind_param('isi', $wv, $fsWin[0], $gid); $st->execute();
+        }
+    } catch (Throwable $e) { error_log('wgc fs wager: ' . $e->getMessage()); }
+}
 if ($track) {
     // Wager progress after the money is booked; never affects the answer.
     try { bwTrackBet($track[0], 'slots', $track[1], $track[2]); } catch (Throwable $e) {}

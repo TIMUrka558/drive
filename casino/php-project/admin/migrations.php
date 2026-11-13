@@ -92,6 +92,7 @@ $migrations = [
     ['kot_promo.promo_type', 'kot_promo','promo_type', "VARCHAR(20) NOT NULL DEFAULT 'deposit'"],
     ['kot_promo.min_amount', 'kot_promo','min_amount', 'DECIMAL(10,2) NOT NULL DEFAULT 0'],
     ['kot_promo.max_amount', 'kot_promo','max_amount', 'DECIMAL(10,2) NOT NULL DEFAULT 0'],
+    ['wgc_games.fs',        'wgc_games','fs',         'TINYINT NOT NULL DEFAULT 0'],
     ['kot_promo.min_dep',    'kot_promo','min_dep',    'DECIMAL(12,2) NOT NULL DEFAULT 0'],
     ['kot_promo.expires_at', 'kot_promo','expires_at', "VARCHAR(50) NOT NULL DEFAULT ''"],
 ];
@@ -144,6 +145,36 @@ mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS wgc_tx (
     rolled_back_at DATETIME NULL,
     KEY user_time (user_id, created_at),
     KEY round (round_id)
+) DEFAULT CHARSET=utf8mb4");
+
+mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS wgc_fs_promo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    public_id VARCHAR(128) NOT NULL,
+    game_name VARCHAR(255) NOT NULL DEFAULT '',
+    spins INT NOT NULL,
+    bet DECIMAL(12,2) NOT NULL,
+    wager_mult INT NOT NULL DEFAULT 1,
+    max_uses INT NOT NULL DEFAULT 0,
+    used INT NOT NULL DEFAULT 0,
+    expires_at VARCHAR(20) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL
+) DEFAULT CHARSET=utf8mb4");
+mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS wgc_fs_grant (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    promo_id INT NOT NULL,
+    user_id INT NOT NULL,
+    freespin_id VARCHAR(128) NULL,
+    public_id VARCHAR(128) NOT NULL,
+    spins INT NOT NULL,
+    bet DECIMAL(12,2) NOT NULL,
+    wager_mult INT NOT NULL DEFAULT 1,
+    win_total BIGINT NOT NULL DEFAULT 0,
+    status VARCHAR(12) NOT NULL DEFAULT 'active',
+    error VARCHAR(255) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL,
+    UNIQUE KEY fs (freespin_id),
+    KEY user_time (user_id, created_at)
 ) DEFAULT CHARSET=utf8mb4");
 
 echo "FastWin DB Migrations\n";
