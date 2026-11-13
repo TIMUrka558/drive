@@ -1,0 +1,1420 @@
+/* ══════════════════════════════════════════════════
+   FASTWIN THEME v6 — Полный рефакторинг всех страниц
+   Копирует стиль fastwin16.org
+   ══════════════════════════════════════════════════ */
+
+/* ── Шрифты ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* ══════════════════════════════════════════════════
+   1. ПЕРЕМЕННЫЕ
+   ══════════════════════════════════════════════════ */
+:root {
+  --bw-blue:        #e0245e;
+  --bw-blue-dark:   #a8143f;
+  --bw-blue-light:  #2a1720;
+  --bw-blue-xs:     #2a1720;
+  --bw-bg:          #f0f2f7;
+  --bw-card:        #ffffff;
+  --bw-text:        #1a1d2e;
+  --bw-muted:       #6b7280;
+  --bw-border:      #e8ebf0;
+  --bw-gold:        #f59e0b;
+  --bw-green:       #10b981;
+  --bw-red:         #ef4444;
+  --bw-r:           16px;
+  --bw-r-sm:        10px;
+  --bw-shadow:      0 2px 12px rgba(224,36,94,0.08);
+  --bw-shadow-md:   0 4px 24px rgba(224,36,94,0.12);
+}
+
+/* ══════════════════════════════════════════════════
+   2. БАЗОВЫЙ СБРОС
+   ══════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  background-color: var(--bw-bg) !important;
+  color: var(--bw-text) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 14px !important;
+  min-height: 100vh !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+/* Убрать тёмный фон с body */
+body.page-profile,
+body.df-roboto,
+body[class],
+body { background: var(--bw-bg) !important; }
+
+/* ══════════════════════════════════════════════════
+   3. ХЕДЕР
+   ══════════════════════════════════════════════════ */
+.navbar,
+.navbar-header,
+.navbar-header-fixed,
+.mob-head,
+.sizesss,
+nav.navbar {
+  background: var(--bw-card) !important;
+  border-bottom: 1px solid var(--bw-border) !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06) !important;
+  padding: 0 16px !important;
+  height: 60px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Логотип */
+.df-logo,
+a.df-logo,
+.navbar-brand,
+a.navbar-brand {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  color: var(--bw-blue) !important;
+  letter-spacing: -0.5px !important;
+  text-decoration: none !important;
+  line-height: 1 !important;
+}
+.df-logo span,
+.navbar-brand span { color: var(--bw-text) !important; }
+
+/* Кнопка входа */
+.btn-brand-01,
+a.btn-brand-01,
+.btndeposit,
+a.btndeposit {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 10px 22px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  cursor: pointer !important;
+  transition: all 0.15s !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+.btn-brand-01:hover,
+a.btn-brand-01:hover,
+.btndeposit:hover { background: var(--bw-blue-dark) !important; color: #fff !important; }
+
+/* Убрать старый хедер на мобайле */
+.mg-header { display: none !important; }
+
+/* ══════════════════════════════════════════════════
+   4. ОСНОВНОЙ КОНТЕНТ
+   ══════════════════════════════════════════════════ */
+.content,
+.content-fixed,
+.container,
+.cont-des,
+#mainView,
+.col7 {
+  background: transparent !important;
+  max-width: 100% !important;
+  padding-bottom: 90px !important; /* место под нижний нав */
+}
+
+/* ── Заголовок страницы (header-wrappers) ── */
+/* Все inline-стили переопределяем через attr-selector */
+.header-wrappers,
+div.header-wrappers {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  padding: 14px 18px !important;
+  margin-bottom: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--bw-text) !important;
+  box-shadow: var(--bw-shadow) !important;
+  border-left: 4px solid var(--bw-blue) !important;
+}
+.header-wrappers img { filter: none !important; }
+
+/* ══════════════════════════════════════════════════
+   5. КАРТОЧКИ (общие)
+   ══════════════════════════════════════════════════ */
+.cardh,
+.cardh2,
+.cardh3,
+.card,
+.card-box,
+.game-container_wallet,
+.payment-total,
+.wm-card,
+[class*="card-box"],
+[class*="cardh"] {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  border: none !important;
+  box-shadow: var(--bw-shadow) !important;
+  margin-bottom: 14px !important;
+}
+
+.card-header,
+.card-body {
+  background: transparent !important;
+  border-color: var(--bw-border) !important;
+}
+
+/* ══════════════════════════════════════════════════
+   6. КНОПКИ
+   ══════════════════════════════════════════════════ */
+.btn, button {
+  font-family: 'Inter', sans-serif !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  transition: all 0.15s !important;
+  cursor: pointer !important;
+}
+
+/* Синяя основная */
+.btn-primary,
+.btn-blue,
+.btn-get-actpromo,
+.game-sidebar__play-button_green,
+[class*="btn-brand"],
+button.btn[style*="#e0245e"],
+button.btn[style*="#0586f9"] {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(224,36,94,0.3) !important;
+}
+.btn-primary:hover,
+.btn-blue:hover { background: var(--bw-blue-dark) !important; }
+
+/* Серая/неактивная */
+.btn-secondary,
+.diceosn,
+.btnnew2 {
+  background: #17151c !important;
+  color: var(--bw-muted) !important;
+  border: 1px solid var(--bw-border) !important;
+}
+
+/* ══════════════════════════════════════════════════
+   7. ПЕРЕБИТЬ ФИОЛЕТОВЫЙ ВЕЗДЕ
+   ══════════════════════════════════════════════════ */
+
+/* Inline-стили с фиолетовым */
+[style*="#e0245e"],
+[style*="#a8143f"],
+[style*="#e0245e"],
+[style*="#e0245e"],
+[style*="#e0245e"],
+[style*="#a09cff"],
+[style*="#9c93ff"],
+[style*="#e0245e"],
+[style*="#9286c1"],
+[style*="#b0a6eb"],
+[style*="#b8a8e1"],
+[style*="#e5dfff"],
+[style*="#e0245e"],
+[style*="#e0245e"] {
+  color: var(--bw-text) !important;
+}
+
+/* Background-gradient фиолетовый */
+[style*="7274ff"],
+[style*="7867fb"],
+div[style*="gradient"][style*="72"],
+div[style*="gradient"][style*="78"] {
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%) !important;
+  color: #fff !important;
+}
+
+/* CSS-классы с фиолетовым */
+.wallet-header,
+.wallet-header .wallet-header__item { 
+  background: var(--bw-card) !important;
+  color: var(--bw-text) !important;
+}
+.wallet-options__item,
+.wallet-options__item-image { background: #17151c !important; }
+.wallet-options__item { border: 1px solid var(--bw-border) !important; }
+.wallet-options__item.active { border-color: var(--bw-blue) !important; }
+.wallet-area__delimiter::before { background: var(--bw-border) !important; }
+
+.sum-option {
+  background: var(--bw-blue-xs) !important;
+  border-color: var(--bw-blue-light) !important;
+  color: var(--bw-blue) !important;
+}
+.sum-option:hover { background: var(--bw-blue-light) !important; }
+
+.game-sidebar__input {
+  border-color: var(--bw-border) !important;
+  background: #17151c !important;
+  color: var(--bw-text) !important;
+}
+.game-sidebar__play-button {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+}
+
+/* ══════════════════════════════════════════════════
+   8. GAMEBAR (боковая/верхняя панель игр)
+   ══════════════════════════════════════════════════ */
+.games_block,
+.gamebar,
+[class*="gamebar"],
+.prokrutka {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  box-shadow: var(--bw-shadow) !important;
+  margin-bottom: 12px !important;
+  overflow: hidden !important;
+}
+
+/* Элементы gamebar */
+.games_block a,
+.gamebar a,
+.game-nav-item {
+  color: var(--bw-muted) !important;
+  transition: all 0.15s !important;
+}
+.games_block a:hover,
+.game-nav-item:hover,
+.game-nav-item.active {
+  color: var(--bw-blue) !important;
+  background: var(--bw-blue-xs) !important;
+}
+
+/* Убрать тёмный фон gamebar */
+.blocked { background: transparent !important; }
+
+/* ══════════════════════════════════════════════════
+   9. ГЛАВНАЯ СТРАНИЦА — ИГРОВЫЕ КАРТОЧКИ
+   ══════════════════════════════════════════════════ */
+.game_shape12 {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: var(--bw-shadow-md) !important;
+  cursor: pointer !important;
+  transition: transform 0.2s !important;
+  margin-bottom: 12px !important;
+}
+.game_shape12:hover { transform: translateY(-3px) !important; }
+.game_shape12 img {
+  filter: hue-rotate(-60deg) saturate(1.1) !important;
+  border-radius: 16px !important;
+}
+
+/* Онлайн-счётчик на карточках */
+.games_Online__pysYz {
+  background: rgba(0,0,0,0.45) !important;
+  border-radius: 20px !important;
+  padding: 3px 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+/* ══════════════════════════════════════════════════
+   10. СЛОТ-СТРАНИЦА — Сетка игр
+   ══════════════════════════════════════════════════ */
+.game_,
+div.game_ {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+  margin: 6px !important;
+  background: #17151c !important;
+}
+.game_:hover { 
+  transform: translateY(-4px) !important; 
+  box-shadow: 0 8px 24px rgba(224,36,94,0.25) !important;
+}
+.game_ .game_image { border-radius: 12px !important; }
+.game_ .game_image img {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 12px !important;
+}
+
+/* Нижний заголовок слота */
+.provider_container {
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%) !important;
+  border-radius: 0 0 12px 12px !important;
+}
+.provider_container2 { color: #fff !important; font-weight: 600 !important; }
+
+/* Фильтр-кнопки слотов */
+.diceact,
+.tablebtn.active,
+button.active.diceact {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  border-color: var(--bw-blue) !important;
+}
+.diceosn,
+.tablebtn:not(.active) {
+  background: #17151c !important;
+  color: var(--bw-muted) !important;
+  border-color: var(--bw-border) !important;
+}
+
+/* Слот-страница: убрать тёмные фоны */
+.carddd { background: var(--bw-card) !important; }
+.editnew { background: #17151c !important; color: var(--bw-text) !important; }
+.btnvibor {
+  background: #17151c !important;
+  color: var(--bw-muted) !important;
+  border: 1px solid var(--bw-border) !important;
+}
+.btnvibor:hover {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+}
+
+/* ══════════════════════════════════════════════════
+   11. СТРАНИЦА БОНУСОВ
+   ══════════════════════════════════════════════════ */
+.col7.col-xl-10.mg-t-10 { padding: 0 12px !important; }
+
+/* Заголовок "БОНУСЫ ОТ FASTWIN" */
+.col7 > h2,
+.col7 > .text-center > h2,
+[class*="bonus"] h2,
+[class*="section"] h2 {
+  color: var(--bw-blue) !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* Бонусные карточки */
+.bonus-card,
+.cardh2 .card-body .row .col-12,
+[class*="bonus-item"],
+[class*="nybonus"] {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  box-shadow: var(--bw-shadow) !important;
+}
+
+/* Промокод-инпут */
+.maksksmaksks,
+input[name*="promo"],
+input[id*="promo"] {
+  border: 1px solid var(--bw-border) !important;
+  border-radius: 10px 0 0 10px !important;
+  background: #17151c !important;
+  color: var(--bw-text) !important;
+}
+
+/* Кнопка "Получить" */
+.btn-get-actpromo,
+button[onclick*="actPromokod"],
+button[onclick*="bonus"],
+.btn-get,
+[class*="getBonus"],
+[class*="btn-get"] {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 0 10px 10px 0 !important;
+  padding: 10px 20px !important;
+  font-weight: 700 !important;
+}
+
+/* Inline-стили фиолетового на бонусах */
+[style*="linear-gradient"][style*="7274"],
+[style*="linear-gradient"][style*="7867"] {
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%) !important;
+}
+
+/* ══════════════════════════════════════════════════
+   12. СТРАНИЦА ПОПОЛНЕНИЯ / ВЫВОДА
+   ══════════════════════════════════════════════════ */
+
+/* Убрать огромный отступ снизу */
+.col-lg-8[style*="margin-bottom:35%"],
+.col-lg-8[style*="margin-bottom: 35%"],
+[style*="margin-bottom:35%"],
+[style*="margin-bottom: 35%"] {
+  margin-bottom: 24px !important;
+}
+
+/* Табы Пополнить/Вывести */
+.wrapperhistory,
+div.wrapperhistory {
+  display: flex !important;
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  padding: 6px !important;
+  margin-bottom: 14px !important;
+  box-shadow: var(--bw-shadow) !important;
+  gap: 6px !important;
+}
+.mainn,
+div.mainn {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: all 0.15s !important;
+  color: var(--bw-muted) !important;
+  background: transparent !important;
+}
+.mainn:hover { background: var(--bw-blue-xs) !important; color: var(--bw-blue) !important; }
+.mainn img { filter: none !important; }
+
+/* Активный таб (страница /deposit — первый активен) */
+body .mainn:first-child,
+#deposits.mainn { 
+  background: var(--bw-blue) !important; 
+  color: #fff !important;
+}
+
+/* Список платёжных систем */
+.wallet-options,
+.systens-wt111 {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.wallet-options__item {
+  background: var(--bw-card) !important;
+  border: 1px solid var(--bw-border) !important;
+  border-radius: var(--bw-r-sm) !important;
+  padding: 14px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  cursor: pointer !important;
+  transition: all 0.15s !important;
+  margin: 0 !important;
+  text-decoration: none !important;
+  color: var(--bw-text) !important;
+}
+.wallet-options__item:hover { 
+  border-color: var(--bw-blue) !important;
+  box-shadow: 0 2px 12px rgba(224,36,94,0.12) !important;
+}
+.wallet-options__item-image { 
+  width: 48px !important; 
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  flex-shrink: 0 !important;
+}
+.wallet-options__item-image img { max-width: 48px !important; max-height: 32px !important; }
+.wallet-options__item-name,
+.wallet-area__payway-name { 
+  font-weight: 600 !important; 
+  color: var(--bw-text) !important;
+  font-size: 14px !important;
+}
+
+/* Форма суммы */
+.payment-total { 
+  background: var(--bw-card) !important;
+  border: 1px solid var(--bw-border) !important;
+  border-radius: var(--bw-r) !important;
+  padding: 20px !important;
+}
+.info-block { 
+  background: var(--bw-blue-xs) !important;
+  color: var(--bw-text) !important;
+  border-left: 4px solid var(--bw-blue) !important;
+}
+
+/* Кнопка "Пополнить" (форма) */
+.game-sidebar__play-button { 
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 14px 20px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  width: 100% !important;
+  border: none !important;
+}
+
+/* ══════════════════════════════════════════════════
+   13. СТРАНИЦА ТУРНИРА
+   ══════════════════════════════════════════════════ */
+.tournament-banner,
+[class*="tournament-banner"],
+[class*="tournir"],
+.cardh2 img[src*="tournament"] { border-radius: var(--bw-r) !important; }
+
+/* Аватар игрока */
+[class*="smileface"],
+.user-ava,
+.user-ava img { border-radius: 50% !important; }
+
+/* Карточка игрока в турнире */
+.player-card,
+[class*="player"],
+.tournament-player {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  box-shadow: var(--bw-shadow) !important;
+}
+
+/* Информация о выигрыше */
+[class*="prize"],
+.prize-card {
+  background: var(--bw-gold) !important;
+  color: #1a1d2e !important;
+  border-radius: var(--bw-r-sm) !important;
+  font-weight: 700 !important;
+}
+
+/* ══════════════════════════════════════════════════
+   14. ПРОФИЛЬ (/me)
+   ══════════════════════════════════════════════════ */
+
+/* Блок аватара */
+.user-box,
+.user-box__main,
+.grid-profile__item,
+.page-profile .cardh2,
+.page-profile .card-header {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+}
+
+/* «На сайте с» — синяя плашка */
+.user-box__footer,
+.user-box__footer div,
+.user-box__footer span {
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  text-align: center !important;
+  margin-top: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+/* Кнопка ВЫХОД */
+.btnwithdraw,
+.btn.btnwithdraw,
+a.btnwithdraw {
+  background: #17151c !important;
+  border: 1px solid var(--bw-border) !important;
+  color: var(--bw-text) !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  padding: 8px 16px !important;
+}
+.btnwithdraw:hover { background: #17151c !important; color: var(--bw-text) !important; }
+
+/* Статистика */
+.card-box,
+.card-box__head,
+[class*="card-box"] { background: var(--bw-card) !important; border-radius: var(--bw-r) !important; }
+.card-box__title-text { color: var(--bw-text) !important; font-size: 15px !important; font-weight: 700 !important; }
+.vat-block__title { color: var(--bw-muted) !important; font-size: 11px !important; font-weight: 600 !important; }
+.vat-block__nums_blue,
+.vat-block__nums_gold,
+.vat-block__nums_green { color: var(--bw-blue) !important; font-size: 20px !important; font-weight: 800 !important; }
+.vat-block__nums_gold { color: var(--bw-gold) !important; }
+.vat-block__nums_green { color: var(--bw-green) !important; }
+
+/* Кнопки Депозит/Вывод на профиле */
+.page-profile a.btnwithdraw[href="/deposit"] {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  border-color: var(--bw-blue) !important;
+}
+.page-profile a.btnwithdraw[href="/withdraw"] {
+  background: #17151c !important;
+  color: var(--bw-text) !important;
+}
+
+/* Цвет статистических чисел */
+[style*="color: #312c48"],
+[style*="color:#312c48"] { color: var(--bw-text) !important; }
+[style*="color: #b0a6eb"],
+[style*="color:#b0a6eb"] { color: var(--bw-muted) !important; }
+
+/* Прогресс-бар */
+.progress { background: var(--bw-blue-light) !important; border-radius: 8px !important; }
+.progress-bar { background: var(--bw-blue) !important; }
+
+/* ══════════════════════════════════════════════════
+   15. ИСТОРИЯ ИГР (таблица)
+   ══════════════════════════════════════════════════ */
+.table,
+table {
+  background: transparent !important;
+  width: 100% !important;
+}
+.table th,
+table th {
+  color: var(--bw-muted) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  background: transparent !important;
+  border-color: var(--bw-border) !important;
+  padding: 10px 8px !important;
+}
+.table td,
+table td {
+  color: var(--bw-text) !important;
+  border-color: var(--bw-border) !important;
+  padding: 10px 8px !important;
+  vertical-align: middle !important;
+}
+.table tr:hover td { background: var(--bw-blue-xs) !important; }
+
+/* Цвета статусов */
+.tx-success, .tx-success2 { color: var(--bw-green) !important; font-weight: 700 !important; }
+.tx-err { color: var(--bw-red) !important; font-weight: 700 !important; }
+
+/* ══════════════════════════════════════════════════
+   16. LIVE-WINS / GAMEBAR ПРАВАЯ ПАНЕЛЬ
+   ══════════════════════════════════════════════════ */
+.livewins,
+[class*="livewins"],
+.outsidebar,
+[class*="outsidebar"],
+#response,
+#myresponse {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  box-shadow: var(--bw-shadow) !important;
+}
+
+/* Скрываем десктопный сайдбар на мобайле */
+@media (max-width: 768px) {
+  .cont-des,
+  .d-none.mexe-let,
+  .col-xl-2.d-none,
+  .hidemobile { display: none !important; }
+}
+
+/* ══════════════════════════════════════════════════
+   17. НИЖНЯЯ НАВИГАЦИЯ (RUBIN Mobile Nav)
+   ══════════════════════════════════════════════════ */
+#bw-mobile-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  background: var(--bw-card) !important;
+  border-top: 1px solid var(--bw-border) !important;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
+  height: 64px !important;
+  padding: 0 4px !important;
+}
+
+.bw-nav-item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  text-decoration: none !important;
+  color: var(--bw-muted) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  margin: 6px 2px !important;
+  padding: 6px 4px !important;
+  transition: all 0.15s !important;
+}
+.bw-nav-item .material-icons { font-size: 22px !important; line-height: 1 !important; }
+.bw-nav-item .nav-label { font-size: 10px !important; }
+
+.bw-nav-item:hover {
+  color: var(--bw-blue) !important;
+  background: var(--bw-blue-xs) !important;
+}
+.bw-nav-item.bw-nav-active {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(224,36,94,0.35) !important;
+}
+.bw-nav-item.bw-nav-active .material-icons,
+.bw-nav-item.bw-nav-active .nav-label { color: #fff !important; }
+
+/* ══════════════════════════════════════════════════
+   18. ПЛАВАЮЩАЯ КНОПКА ПОДДЕРЖКИ
+   ══════════════════════════════════════════════════ */
+#bw-chat-btn {
+  position: fixed !important;
+  bottom: 80px !important;
+  right: 16px !important;
+  width: 52px !important;
+  height: 52px !important;
+  background: var(--bw-blue) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 16px rgba(224,36,94,0.4) !important;
+  z-index: 9000 !important;
+  transition: all 0.2s !important;
+}
+#bw-chat-btn:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(224,36,94,0.5) !important;
+}
+#bw-chat-btn .material-icons { font-size: 26px !important; }
+
+/* ══════════════════════════════════════════════════
+   19. УВЕДОМЛЕНИЯ (Noty)
+   ══════════════════════════════════════════════════ */
+.noty_bar,
+.noty_message,
+[class*="noty"] {
+  font-family: 'Inter', sans-serif !important;
+  border-radius: 12px !important;
+}
+
+/* ══════════════════════════════════════════════════
+   20. ДЕСКТОП (768px+)
+   ══════════════════════════════════════════════════ */
+@media (min-width: 769px) {
+  /* Скрыть мобильный нав на десктопе */
+  #bw-mobile-nav { display: none !important; }
+  #bw-chat-btn { bottom: 24px !important; }
+
+  /* Убрать padding-bottom для нижнего нава */
+  .content, .content-fixed, #mainView { padding-bottom: 24px !important; }
+
+  /* Показать десктопный navbar */
+  .navbar-menu-wrapper { display: flex !important; flex: 1 !important; }
+
+  /* Nav ссылки */
+  .rheader__link, a.rheader__link {
+    color: var(--bw-muted) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 8px 12px !important;
+    border-radius: var(--bw-r-sm) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: all 0.15s !important;
+    text-decoration: none !important;
+  }
+  .rheader__link:hover,
+  .rheader__link.activepage1 {
+    background: var(--bw-blue-xs) !important;
+    color: var(--bw-blue) !important;
+  }
+  .rheader__link .material-icons { font-size: 18px !important; }
+
+  /* DF-logo */
+  .df-logo { font-size: 22px !important; }
+
+  /* Десктопная сетка */
+  .col-lg-3 { flex: 0 0 25% !important; max-width: 25% !important; }
+  .col-lg-4 { flex: 0 0 33.333% !important; max-width: 33.333% !important; }
+  .col-lg-8 { flex: 0 0 66.666% !important; max-width: 66.666% !important; }
+}
+
+/* ══════════════════════════════════════════════════
+   21. МОДАЛЬНЫЕ ОКНА
+   ══════════════════════════════════════════════════ */
+.modal-content {
+  background: var(--bw-card) !important;
+  border-radius: var(--bw-r) !important;
+  border: none !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2) !important;
+}
+.modal-header {
+  border-bottom: 1px solid var(--bw-border) !important;
+  background: transparent !important;
+}
+.modal-title { font-weight: 700 !important; color: var(--bw-text) !important; }
+
+/* ══════════════════════════════════════════════════
+   22. ФОРМЫ / ИНПУТЫ
+   ══════════════════════════════════════════════════ */
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"],
+textarea,
+select {
+  background: #17151c !important;
+  border: 1px solid var(--bw-border) !important;
+  border-radius: 10px !important;
+  color: var(--bw-text) !important;
+  padding: 10px 14px !important;
+  font-family: 'Inter', sans-serif !important;
+  transition: border-color 0.15s !important;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus { 
+  border-color: var(--bw-blue) !important; 
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(224,36,94,0.15) !important;
+}
+
+/* ══════════════════════════════════════════════════
+   23. ПАГИНАЦИЯ / BADGE
+   ══════════════════════════════════════════════════ */
+.badge,
+.badge7 {
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+.badge-primary,
+.bg-primary { background: var(--bw-blue) !important; color: #fff !important; }
+.badge-success,
+.bg-success { background: var(--bw-green) !important; color: #fff !important; }
+
+/* ══════════════════════════════════════════════════
+   24. БАННЕР ТУРНИРА (главная)
+   ══════════════════════════════════════════════════ */
+img[src*="banner"],
+img[src*="turni"],
+img[src*="milrub"] { 
+  border-radius: var(--bw-r) !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+/* ══════════════════════════════════════════════════
+   25. SCROLLBAR
+   ══════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #17151c; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* ══════════════════════════════════════════════════
+   26. АНИМАЦИИ
+   ══════════════════════════════════════════════════ */
+@keyframes bw-fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.cardh, .cardh2, .card-box, .bw-nav-item { animation: bw-fade-in 0.2s ease; }
+
+/* ══════════════════════════════════════════════════
+   27. ИСПРАВЛЕНИЕ СПЕЦИФИЧЕСКИХ INLINE-СТИЛЕЙ
+   ══════════════════════════════════════════════════ */
+
+/* Профиль: inline color=#312c48 → нормальный текст */
+.vat-block__title[style],
+span[style*="312c48"],
+span[style*="#312c48"] { color: var(--bw-text) !important; }
+
+/* Профиль: inline color=#b0a6eb → grey */
+span[style*="b0a6eb"],
+span[style*="#b0a6eb"],
+.card-box__title-text[style],
+[style*="color: #b0a6eb"] { color: var(--bw-muted) !important; }
+
+/* Убрать margin-bottom:35% на депозите */
+div[style*="margin-bottom:35"],
+div[style*="margin-bottom: 35"] { margin-bottom: 0 !important; padding-bottom: 24px !important; }
+
+/* Inline color:#eae4ff (user id) */
+[style*="eae4ff"],
+[style*="#eae4ff"] { color: rgba(255,255,255,0.85) !important; }
+
+/* ══════════════════════════════════════════════════
+   28. ПЕЧАТЬ
+   ══════════════════════════════════════════════════ */
+@media print {
+  header, #bw-mobile-nav, #bw-chat-btn, footer { display: none !important; }
+  .content.content-fixed { padding: 0 !important; }
+}
+
+/* ══════════════════════════════════════════════════
+   29. БОКОВОЕ МЕНЮ (Sidebar)
+   ══════════════════════════════════════════════════ */
+#bw-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 19000;
+  backdrop-filter: blur(2px);
+}
+#bw-sidebar-overlay.active { display: block; }
+
+#bw-sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100vh;
+  background: var(--bw-card);
+  z-index: 20000;
+  transition: left 0.3s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  overflow-y: auto;
+}
+#bw-sidebar.open { left: 0; }
+
+#bw-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--bw-border);
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%);
+  flex-shrink: 0;
+}
+#bw-sidebar-logo {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+#bw-sidebar-close {
+  width: 30px;
+  height: 30px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+#bw-sidebar-close:hover { background: rgba(255,255,255,0.35); }
+
+.bw-sidebar-section {
+  padding: 4px 8px 0;
+}
+.bw-sidebar-section-title {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bw-muted);
+  padding: 0 6px 3px;
+}
+.bw-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--bw-text);
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s;
+  margin-bottom: 1px;
+}
+.bw-sidebar-link .material-icons {
+  font-size: 18px;
+  color: var(--bw-muted);
+  flex-shrink: 0;
+}
+.bw-sidebar-link:hover {
+  background: var(--bw-blue-xs);
+  color: var(--bw-blue);
+}
+.bw-sidebar-link:hover .material-icons { color: var(--bw-blue); }
+.bw-sidebar-link.active-link {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+}
+.bw-sidebar-link.active-link .material-icons { color: #fff !important; }
+
+.bw-sidebar-divider {
+  height: 1px;
+  background: var(--bw-border);
+  margin: 4px 8px;
+}
+
+/* Кнопка гамбургера */
+#bw-hamburger {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 18000;
+  width: 42px;
+  height: 42px;
+  background: var(--bw-card);
+  border: 1px solid var(--bw-border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.15s;
+}
+#bw-hamburger:hover { background: var(--bw-blue-xs); border-color: var(--bw-blue); }
+#bw-hamburger .material-icons { font-size: 22px; color: var(--bw-text); }
+
+/* Отступ для контента с учётом гамбургера */
+@media (max-width: 768px) {
+  .mob-head,
+  .navbar-header-fixed {
+    padding-left: 62px !important;
+  }
+  .df-logo, a.df-logo { margin-left: 0 !important; }
+}
+
+/* ══════════════════════════════════════════════════
+   30. ЦЕНТРАЛИЗАЦИЯ И РАВНЫЕ КАРТОЧКИ (Layout Fix)
+   ══════════════════════════════════════════════════ */
+
+/* Сетка бонусных карточек — вертикальная стопка с равной шириной */
+.cards__row,
+div.cards__row,
+[class*="cards__row"] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+}
+
+/* Каждая карточка бонуса — полная ширина, фиксированная мин. высота */
+.wrapper.svelte-8q9kr8,
+div.wrapper.svelte-8q9kr8 {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.wrapper__body.box.outlined,
+.wrapper__body.svelte-6hwl18 {
+  border-radius: 16px !important;
+  padding: 20px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-height: 200px !important;
+}
+
+/* Перебить inline-стили с фиолетовыми градиентами на бонусных карточках */
+[style*="b46fff"], [style*="#e0245e"],
+[style*="d429ff"], [style*="#e0245e"],
+[style*="6F7DFF"], [style*="#e0245e"],
+[style*="8729FF"], [style*="#e0245e"],
+[style*="5a53f1"], [style*="#e0245e"],
+[style*="7e6afc"], [style*="#e0245e"],
+[style*="852fff"], [style*="#e0245e"],
+[style*="7274ff"], [style*="#e0245e"],
+[style*="7867fb"], [style*="#a8143f"] {
+  background: linear-gradient(135deg, #e0245e 0%, #a8143f 100%) !important;
+}
+
+/* Секция монет на бонусной карточке */
+.coins.svelte-8q9kr8,
+.row.svelte-8q9kr8 { flex-shrink: 0 !important; }
+
+/* Заголовок "БОНУСЫ ОТ FASTWIN" — стильный */
+.bonuses-title-container {
+  background: var(--bw-bg) !important;
+  z-index: 3 !important;
+}
+.bonuses-title {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  letter-spacing: 2px !important;
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* ══════════════════════════════════════════════════
+   31. СКРЫТЬ VK-ЭЛЕМЕНТЫ ЧЕРЕЗ CSS
+   ══════════════════════════════════════════════════ */
+img[src*="/vk.png"],
+img[src*="/vks.png"],
+img[src*="VK2.png"],
+img[alt="vk"],
+img[alt="Вконтакте"],
+.vks,
+a[href*="vk.com"] { display: none !important; }
+
+/* Скрыть секцию "Привязка социальных сетей" если не удалось через PHP */
+.card-box:has(.social),
+div:has(> .social) { display: none !important; }
+
+/* ══════════════════════════════════════════════════
+   32. ФОРМА ВХОДА / РЕГИСТРАЦИИ (Auth Modal)
+   ══════════════════════════════════════════════════ */
+#modalLogIn .modal-dialog,
+#modalReg .modal-dialog,
+.modal-dialog {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  max-width: 400px !important;
+  margin: 20px auto !important;
+}
+
+#modalLogIn .modal-content,
+#modalReg .modal-content,
+.modal-content {
+  border-radius: 20px !important;
+  padding: 0 !important;
+}
+
+#modalLogIn .modal-header,
+#modalReg .modal-header,
+.modal-header {
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%) !important;
+  color: #fff !important;
+  padding: 20px 24px !important;
+  border-radius: 20px 20px 0 0 !important;
+}
+
+.modal-title { color: #fff !important; font-size: 18px !important; font-weight: 800 !important; }
+
+.modal-header .close,
+.modal-header button.close {
+  color: #fff !important;
+  opacity: 0.8 !important;
+  font-size: 24px !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+#modalLogIn .modal-body,
+#modalReg .modal-body,
+.modal-body {
+  padding: 24px !important;
+  background: var(--bw-card) !important;
+}
+
+/* Таб-навигация в модале */
+.nav-tabs .nav-link,
+#loginTab .nav-link,
+#regTab .nav-link {
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  color: var(--bw-muted) !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  transition: all 0.15s !important;
+}
+.nav-tabs .nav-link.active,
+#loginTab .nav-link.active {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+/* Кнопка войти/зарегистрироваться в форме */
+button[onclick*="logIn"],
+button[onclick*="reg"],
+button[onclick*="login"],
+button[onclick*="auth"],
+.btn-auth {
+  background: var(--bw-blue) !important;
+  color: #fff !important;
+  width: 100% !important;
+  padding: 14px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  border: none !important;
+  margin-top: 8px !important;
+}
+
+/* Vk кнопки в auth — убрать */
+.vks, .vkss,
+div[class*="vk"],
+button[onclick*="vk"],
+a[href*="oauth.vk"],
+a[href*="vk.com/oauth"] { display: none !important; }
+
+/* ══════════════════════════════════════════════════
+   33. ПРОФИЛЬ — улучшенный вид
+   ══════════════════════════════════════════════════ */
+
+/* Аватар профиля */
+.user-box img,
+.ava,
+img.ava,
+[class*="avatar"] img {
+  border-radius: 50% !important;
+  border: 3px solid var(--bw-blue-light) !important;
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: cover !important;
+}
+
+/* Секция "На сайте с" */
+[class*="regdate"],
+.regdate,
+div[style*="На сайте"] {
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 12px 20px !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  width: 100% !important;
+}
+
+/* Статистические блоки — равная сетка */
+.grid.grid_md {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+}
+.vat-block {
+  background: var(--bw-bg) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  text-align: center !important;
+}
+.vat-block__icon { margin-bottom: 8px !important; }
+.vat-block__icon img { width: 32px !important; height: 32px !important; }
+.vat-block__title {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: var(--bw-muted) !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+}
+.vat-block__nums {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: var(--bw-blue) !important;
+  display: block !important;
+}
+
+/* ══════════════════════════════════════════════════
+   34. ИГРОВЫЕ СТРАНИЦЫ (Dice, Mines, Bubbles)
+   ══════════════════════════════════════════════════ */
+
+/* Кнопки Min/Max/X2 и т.д. */
+.dicebuttons button,
+.btnmines,
+.dicebtn,
+[class*="diceact"],
+[class*="dice_btn"] {
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  transition: all 0.15s !important;
+}
+
+/* Фиолетовые кнопки в играх → синие */
+[class*="svelte"] button[style*="7274"],
+[class*="svelte"] button[style*="7867"],
+button[style*="gradient"][style*="53f1"],
+button[style*="gradient"][style*="6afc"] {
+  background: linear-gradient(135deg, var(--bw-blue) 0%, var(--bw-blue-dark) 100%) !important;
+}
+
+/* Кнопка "Создать игру" */
+button[onClick*="game"],
+button[onclick*="play"],
+.create-btn,
+#createGame,
+[id*="create"] {
+  background: linear-gradient(135deg, var(--bw-gold) 0%, #e68a00 100%) !important;
+  color: #1a1d2e !important;
+  font-weight: 800 !important;
+  padding: 16px !important;
+  width: 100% !important;
+  border-radius: 14px !important;
+  font-size: 16px !important;
+  border: none !important;
+}
+
+/* Вертикальный контейнер игры */
+.game-sidebar__content { 
+  background: var(--bw-card) !important; 
+  border-radius: 16px !important;
+  padding: 20px !important;
+  box-shadow: var(--bw-shadow) !important;
+}
+
+/* ══════════════════════════════════════════════════
+   35. FOOTER (нижний блок) 
+   ══════════════════════════════════════════════════ */
+.v-footer,
+.footerwrapper,
+.footerwrapper * {
+  background: var(--bw-bg) !important;
+  color: var(--bw-muted) !important;
+}
+.v-footer__bottom-desc,
+.v-footer__bottom-trix {
+  font-size: 11px !important;
+  color: #9ca3af !important;
+  text-align: center !important;
+}
+.v-footer__methods-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  align-items: center !important;
+}
+.v-footer__methods-item {
+  max-height: 32px !important;
+  width: auto !important;
+  filter: grayscale(40%) !important;
+  opacity: 0.7 !important;
+}
+
+/* ══════════════════════════════════════════════════
+   36. ДОПОЛНИТЕЛЬНЫЕ INLINE-STYLE ПЕРЕБИВКИ
+   ══════════════════════════════════════════════════ */
+/* Inline background=#BAB1ED (фиолетовый хедер) */
+[style*="BAB1ED"] { background: var(--bw-card) !important; color: var(--bw-text) !important; }
+
+/* Inline background=e8e5f8 (purple-tinted) */
+[style*="e8e5f8"],
+[style*="#e8e5f8"] { background: var(--bw-bg) !important; }
+
+/* Inline color=#837998 (grey-purple) */
+[style*="837998"],
+[style*="#837998"] { color: var(--bw-muted) !important; }
+
+/* Кнопки "Пополнить" / "Вывод" на мобайле */
+a.btndeposit2, .btndeposit2 {
+  background: var(--bw-blue) !important;
+  border-radius: 10px !important;
+}
+a.btnwithdraw2, .btnwithdraw2 {
+  background: #17151c !important;
+  color: var(--bw-text) !important;
+  border-radius: 10px !important;
+}
+
+/* Убрать фиолетовый из прогресс-бара бонусов */
+.progress.svelte-1u851mo {
+  background: rgba(255,255,255,0.25) !important;
+}

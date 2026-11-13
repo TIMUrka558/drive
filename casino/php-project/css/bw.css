@@ -1,0 +1,769 @@
+/* ═══════════════════════════════════════════════════
+   RUBIN Design System v8 — чистый, без переопределений
+   ═══════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --blue:        #e0245e;
+  --blue-dark:   #a8143f;
+  --blue-light:  #2a1720;
+  --blue-xs:     #2a1720;
+  --bg:          #f0f2f7;
+  --card:        #ffffff;
+  --text:        #1a1d2e;
+  --muted:       #6b7280;
+  --border:      #e8ebf0;
+  --gold:        #f59e0b;
+  --green:       #10b981;
+  --red:         #ef4444;
+  --r:           16px;
+  --r-sm:        10px;
+  --shadow:      0 2px 12px rgba(224,36,94,0.07);
+  --shadow-md:   0 4px 24px rgba(224,36,94,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Контейнер страницы ── */
+.bw-page {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 14px 120px;
+}
+
+/* ── Карточка ── */
+.bw-card {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.bw-card-sm { padding: 14px; }
+
+/* ── Заголовок страницы ── */
+.bw-page-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  border-left: 4px solid var(--blue);
+}
+.bw-page-title .bw-page-icon {
+  width: 36px; height: 36px;
+  background: var(--blue-light);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.bw-page-icon .material-icons { font-size: 20px; color: var(--blue); }
+
+/* ── Кнопки ── */
+.bw-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px;
+  border: none; outline: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: var(--r-sm);
+  padding: 12px 20px;
+  transition: all 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.bw-btn-primary {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(224,36,94,0.35);
+}
+.bw-btn-primary:hover { background: var(--blue-dark); color: #fff; }
+
+.bw-btn-secondary {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+.bw-btn-secondary:hover { background: #17151c; color: var(--blue-dark); }
+
+.bw-btn-ghost {
+  background: #17151c;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.bw-btn-ghost:hover { background: #17151c; }
+
+.bw-btn-gold {
+  background: linear-gradient(135deg, #ffdb6f 0%, #f59e0b 100%);
+  color: #1a1d2e;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(245,158,11,0.35);
+}
+.bw-btn-gold:hover { filter: brightness(1.05); }
+
+.bw-btn-full { width: 100%; }
+.bw-btn-lg { padding: 16px 24px; font-size: 16px; border-radius: 14px; }
+.bw-btn-sm { padding: 8px 14px; font-size: 12px; }
+
+/* ── Входящий инпут ── */
+.bw-input {
+  width: 100%;
+  background: #17151c;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 12px 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.bw-input:focus {
+  border-color: var(--blue);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(224,36,94,0.12);
+}
+.bw-input::placeholder { color: #b0b8c1; }
+
+/* ── Секция-заголовок ── */
+.bw-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  margin: 18px 0 10px;
+  padding: 0 2px;
+}
+
+/* ── Бонусная карточка (градиент) ── */
+.bw-bonus-card {
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+.bw-bonus-card-blue {
+  background: linear-gradient(135deg, #e0245e 0%, #a8143f 100%);
+}
+.bw-bonus-card-dark {
+  background: linear-gradient(135deg, #1255cc 0%, #0a3fa0 100%);
+}
+.bw-bonus-card-teal {
+  background: linear-gradient(135deg, #0891b2 0%, #06607a 100%);
+}
+.bw-bonus-card-white {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.bw-bonus-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+}
+.bw-bonus-card::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -20px;
+  width: 160px; height: 160px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+
+.bw-bonus-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.bw-bonus-icon {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.bw-bonus-icon .material-icons { font-size: 20px; color: #fff; }
+.bw-bonus-icon-dark {
+  background: var(--blue-light);
+}
+.bw-bonus-icon-dark .material-icons { color: var(--blue); }
+
+.bw-bonus-title {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.bw-bonus-card-white .bw-bonus-title { color: var(--text); }
+
+.bw-bonus-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  margin: 8px 0 14px;
+  line-height: 1.5;
+}
+.bw-bonus-card-white .bw-bonus-desc { color: var(--muted); }
+
+.bw-bonus-meta {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 14px;
+}
+.bw-bonus-card-white .bw-bonus-meta { color: var(--muted); }
+
+.bw-bonus-progress {
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  margin-bottom: 14px;
+}
+
+.bw-bonus-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+
+.bw-bonus-amount {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  flex: 1;
+}
+.bw-bonus-card-white .bw-bonus-amount {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+.bw-promo-input-row {
+  display: flex; gap: 8px; align-items: stretch; margin-bottom: 12px;
+}
+.bw-promo-input-row .bw-input {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.25);
+  color: #fff;
+  flex: 1;
+}
+.bw-promo-input-row .bw-input::placeholder { color: rgba(255,255,255,0.55); }
+
+/* ── Слот-сетка ── */
+.bw-slot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.bw-slot-card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #17151c;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  aspect-ratio: 3/4;
+}
+.bw-slot-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(224,36,94,0.22); }
+.bw-slot-card img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+.bw-slot-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: #ff4c4c;
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 10px; font-weight: 700; color: #fff;
+  display: flex; align-items: center; gap: 3px;
+  z-index: 2;
+}
+.bw-slot-badge .material-icons { font-size: 12px; }
+.bw-slot-name {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+  padding: 28px 10px 10px;
+  border-radius: 0 0 14px 14px;
+}
+.bw-slot-name p {
+  font-size: 12px; font-weight: 700; color: #fff;
+  margin: 0; text-transform: uppercase; letter-spacing: 0.5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bw-slot-provider {
+  font-size: 10px; color: rgba(255,255,255,0.7); font-weight: 500;
+}
+
+/* ── Оригинальные игры ── */
+.bw-orig-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (min-width: 340px) {
+  .bw-orig-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.bw-orig-card {
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.18s;
+  box-shadow: var(--shadow-md);
+  aspect-ratio: 4 / 3;
+}
+.bw-orig-card:hover { transform: translateY(-3px); }
+.bw-orig-card img { width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; top: 0; left: 0; }
+.bw-orig-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  padding: 20px 12px 10px;
+  font-size: 13px; font-weight: 700; color: #fff;
+}
+.bw-orig-online {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 20px; padding: 3px 8px;
+  font-size: 10px; color: #fff; font-weight: 600;
+  display: flex; align-items: center; gap: 3px;
+}
+.bw-online-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #10b981;
+}
+
+/* ── Баннер-слайдер ── */
+.bw-banner {
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.bw-banner img { width: 100%; display: block; border-radius: var(--r); }
+
+/* ── Платёжные методы ── */
+.bw-payment-list { display: flex; flex-direction: column; gap: 8px; }
+.bw-payment-item {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.bw-payment-item:hover {
+  border-color: var(--blue);
+  box-shadow: 0 2px 12px rgba(224,36,94,0.12);
+  color: var(--text);
+}
+.bw-payment-logo {
+  width: 48px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.bw-payment-logo img { max-width: 48px; max-height: 32px; object-fit: contain; }
+.bw-payment-name { font-weight: 600; font-size: 14px; }
+.bw-payment-arrow { margin-left: auto; color: var(--muted); }
+.bw-payment-arrow .material-icons { font-size: 18px; }
+
+/* ── Табы Пополнить / Вывести ── */
+.bw-tabs {
+  display: flex;
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 6px;
+  gap: 6px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.bw-tab {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px;
+  border-radius: var(--r-sm);
+  font-weight: 700; font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--muted);
+  text-decoration: none;
+  border: none; background: transparent;
+}
+.bw-tab:hover { background: var(--blue-xs); color: var(--blue); }
+.bw-tab.active {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(224,36,94,0.3);
+}
+.bw-tab .material-icons { font-size: 18px; }
+
+/* ── Профиль ── */
+.bw-profile-hero {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 24px 18px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.bw-avatar-wrap {
+  position: relative; display: inline-block; margin-bottom: 14px;
+}
+.bw-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--blue-light);
+  object-fit: cover;
+  display: block;
+}
+.bw-avatar-badge {
+  position: absolute; bottom: 0; right: 0;
+  width: 22px; height: 22px;
+  background: var(--blue);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.bw-avatar-badge .material-icons { font-size: 12px; color: #fff; }
+.bw-profile-name {
+  font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px;
+}
+.bw-profile-since {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+  color: #fff;
+  border-radius: 30px;
+  padding: 6px 16px;
+  font-size: 12px; font-weight: 600;
+  margin: 10px 0 14px;
+}
+.bw-profile-actions {
+  display: flex; gap: 8px; justify-content: center; margin-top: 4px;
+}
+
+.bw-stat-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 12px;
+}
+.bw-stat-card {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 18px 14px;
+  text-align: center;
+}
+.bw-stat-icon { margin-bottom: 8px; }
+.bw-stat-icon img { width: 32px; height: 32px; }
+.bw-stat-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--muted); margin-bottom: 4px;
+}
+.bw-stat-value {
+  font-size: 22px; font-weight: 800; color: var(--blue);
+}
+.bw-stat-value.gold { color: var(--gold); }
+.bw-stat-value.green { color: var(--green); }
+
+/* ── Слот фильтры ── */
+.bw-filter-row {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 14px;
+  scrollbar-width: none;
+}
+.bw-filter-row::-webkit-scrollbar { display: none; }
+.bw-filter-btn {
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px; font-weight: 600;
+  color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
+}
+.bw-filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+.bw-filter-btn.active {
+  background: var(--blue); border-color: var(--blue); color: #fff;
+}
+
+/* ── Турнир ── */
+.bw-tournament-banner {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.bw-tournament-banner h2 { font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+.bw-tournament-banner p { font-size: 13px; opacity: 0.9; margin: 0; }
+.bw-tournament-prize { font-size: 28px; font-weight: 900; }
+
+.bw-podium { display: flex; gap: 10px; margin-bottom: 14px; }
+.bw-podium-card {
+  flex: 1; background: var(--card);
+  border-radius: var(--r); padding: 16px 10px;
+  text-align: center; box-shadow: var(--shadow);
+  position: relative;
+}
+.bw-podium-medal { font-size: 24px; margin-bottom: 8px; }
+.bw-podium-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  margin: 0 auto 8px; overflow: hidden;
+  border: 2px solid var(--blue-light);
+}
+.bw-podium-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.bw-podium-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.bw-podium-bet { font-size: 11px; color: var(--muted); }
+.bw-podium-prize {
+  background: linear-gradient(135deg, var(--gold) 0%, #e68a00 100%);
+  color: #fff; font-size: 12px; font-weight: 800;
+  border-radius: 8px; padding: 6px 8px;
+  margin-top: 8px; text-align: center;
+}
+.bw-podium-card.first { border: 2px solid var(--gold); }
+
+.bw-leaderboard { background: var(--card); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
+.bw-lb-header {
+  display: grid; grid-template-columns: 40px 1fr 80px 90px;
+  padding: 12px 16px;
+  background: var(--blue-xs);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted);
+}
+.bw-lb-row {
+  display: grid; grid-template-columns: 40px 1fr 80px 90px;
+  padding: 14px 16px; border-top: 1px solid var(--border);
+  align-items: center; transition: background 0.1s;
+}
+.bw-lb-row:hover { background: var(--blue-xs); }
+.bw-lb-row.me { background: var(--blue-xs); border: 1.5px solid var(--blue-light); }
+.bw-lb-rank { font-size: 13px; font-weight: 800; color: var(--muted); }
+.bw-lb-rank.top3 { color: var(--gold); }
+.bw-lb-player { display: flex; align-items: center; gap: 8px; }
+.bw-lb-ava {
+  width: 32px; height: 32px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+}
+.bw-lb-ava img { width: 100%; height: 100%; object-fit: cover; }
+.bw-lb-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.bw-lb-bets { font-size: 13px; font-weight: 600; color: var(--muted); text-align: right; }
+.bw-lb-prize { font-size: 13px; font-weight: 700; color: var(--gold); text-align: right; }
+
+/* ── Скроллбар ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #17151c; border-radius: 3px; }
+
+/* ── Анимация ── */
+@keyframes bw-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.bw-card, .bw-bonus-card, .bw-slot-card { animation: bw-in 0.2s ease; }
+
+/* ── Отступ сверху (уменьшен для мобайла) ── */
+@media (max-width: 767px) {
+  .mg-content { margin-top: 20px !important; }
+  .content.content-fixed.mg-content { margin-top: 20px !important; }
+  .bw-page { padding-top: 2px !important; }
+}
+
+/* ── Быстрая навигация: убираем мигание ── */
+body { -webkit-tap-highlight-color: transparent; }
+#bw-mobile-nav a, .bw-nav-item { transition: color 0.15s, background 0.15s; }
+
+/* ── Footer с навигацией и лицензией ── */
+#bw-footer {
+  max-width: 520px;
+  margin: 16px auto 130px;
+  padding: 0 14px;
+}
+#bw-footer-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: #17151c;
+  border-radius: 16px;
+  padding: 18px 16px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+}
+.bw-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 10px;
+}
+.bw-footer-col-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.bw-footer-link {
+  font-size: 13px;
+  color: var(--muted) !important;
+  text-decoration: none;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.bw-footer-link:hover { color: var(--blue) !important; }
+
+#bw-footer-license {
+  background: #17151c;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+#bw-footer-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+#bw-footer-icons img {
+  height: 44px;
+  object-fit: contain;
+}
+#bw-footer-license p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 6px;
+}
+#bw-footer-license span {
+  font-size: 11px;
+  color: #aab0bc;
+  font-weight: 500;
+}
+
+/* ── Кнопки Войти + Регистрация (fixed, для гостей) ── */
+#bw-auth-buttons {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10000;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+#bw-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  background: transparent;
+  color: var(--blue) !important;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 2px solid var(--blue);
+  letter-spacing: 0.2px;
+}
+#bw-reg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  background: linear-gradient(135deg, #e0245e 0%, #a8143f 100%);
+  color: #fff !important;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 3px 12px rgba(224,36,94,0.35);
+  letter-spacing: 0.2px;
+}
+
+/* ── Утилиты ── */
+.bw-row { display: flex; gap: 10px; }
+.bw-col { flex: 1; min-width: 0; }
+.bw-text-center { text-align: center; }
+.bw-mt-8 { margin-top: 8px; }
+.bw-mt-12 { margin-top: 12px; }
+.bw-mb-0 { margin-bottom: 0; }
+.bw-divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+/* ── Промо-код форма ── */
+.bw-promo-row {
+  display: flex; gap: 8px; align-items: center;
+}
+.bw-promo-row .bw-input { flex: 1; }
+
+/* ── History/Live wins (override gloabl) ── */
+#response div, #myresponse div {
+  background: var(--card) !important;
+  border-bottom: 1px solid var(--border) !important;
+  border-radius: 0 !important;
+  padding: 10px 14px !important;
+  font-size: 13px !important;
+  color: var(--text) !important;
+}
+
+/* ── Модальное окно регистрации/входа (fix) ── */
+.modal-content {
+  border-radius: var(--r) !important;
+  border: none !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18) !important;
+}
+.modal-header {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%) !important;
+  border-radius: var(--r) var(--r) 0 0 !important;
+  padding: 18px 20px !important;
+  border-bottom: none !important;
+}
+.modal-header .modal-title { color: #fff !important; font-weight: 800 !important; }
+.modal-header .close { color: #fff !important; opacity: 0.8 !important; }
+.modal-body { padding: 20px !important; }
+.nav-tabs .nav-link {
+  font-weight: 700 !important; border: none !important;
+  color: var(--muted) !important; border-radius: 8px !important;
+}
+.nav-tabs .nav-link.active {
+  background: var(--blue) !important; color: #fff !important;
+}
+/* Скрыть VK в auth */
+.vks, a[href*="oauth.vk"], img[src*="vk"],
+a[href*="vk.com"] { display:none !important; }
+
+/* Hide RTP/? button in all games */
+.fiatbtn.visual { display: none !important; }
+
+/* Hide fairness-check button in all games */
+.dice_sidebar-btns { display: none !important; }
+
+/* Hide old site header & mobile deposit/withdraw bar — replaced by RUBIN topbar */
+#topeeed { display: none !important; }
+.bt-mob { display: none !important; }

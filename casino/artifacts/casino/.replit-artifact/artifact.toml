@@ -1,0 +1,22 @@
+kind = "web"
+previewPath = "/"
+title = "BeeWin Casino"
+description = "PHP-based online casino with games (Dice, Mines, Wheel, Slots, Bubbles) styled in BeeWin16 design. Served by PHP 8.2 built-in server backed by MySQL 8."
+version = "1.0.0"
+id = "artifacts/casino"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22412
+
+[services.development]
+run = "bash /home/runner/workspace/start.sh"
+
+[services.production]
+run = [ "bash", "/home/runner/workspace/start.sh" ]
+
+[services.env]
+PORT = "22412"
+BASE_PATH = "/"

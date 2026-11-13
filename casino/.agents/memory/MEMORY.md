@@ -1,0 +1,2 @@
+- [PHP-MySQL setup on Replit](php-mysql-setup.md) — MySQL 8 via Nix, socket at mysql-run/mysql.sock, php-8.2 module; mysql_* shim pattern avoids touching all game files.
+- [PHP router chdir pattern](php-router-chdir.md) — PHP built-in server needs chdir+set_include_path in router.php so legacy relative require() calls work from any include depth.

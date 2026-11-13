@@ -1,0 +1,9 @@
+libaio1=0.3.113-4
+libnuma1=2.0.16-1
+php8.2-bcmath=8.2.35-1~deb12u1
+php8.2-cli=8.2.35-1~deb12u1
+php8.2-curl=8.2.35-1~deb12u1
+php8.2-gd=8.2.35-1~deb12u1
+php8.2-mbstring=8.2.35-1~deb12u1
+php8.2-mysql=8.2.35-1~deb12u1
+php8.2-xml=8.2.35-1~deb12u1

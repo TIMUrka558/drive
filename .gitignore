@@ -83,3 +83,10 @@ android-sdk/
 
 # overlay black-box crash/user-report dumps — session data, never history
 **/.emergent/recordings/
+casino/.git/objects/pack/pack-158439d0b6511616f8f31de0e1f8af183726d9f8.pack
+.env
+.env.*
+*.env
+credentials.json
+*.key
+.credentials
