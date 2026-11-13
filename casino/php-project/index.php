@@ -119,7 +119,7 @@ setInterval(historys, 5000);
   <?php if ($home_slots): ?>
   <div class="bw-slot-grid rb-wgc-grid" data-testid="home-slots-grid">
     <?php foreach ($home_slots as $s): ?>
-    <a href="/playslot?g=<?= urlencode($s['public_id']) ?>" class="bw-slot-card rb-wgc-card" style="text-decoration:none;--bg:url('<?= htmlspecialchars($s['image']) ?>')" title="<?= htmlspecialchars($s['name'] . ' · ' . $s['brand']) ?>">
+    <a href="/playslot?g=<?= urlencode($s['public_id']) ?>" class="bw-slot-card rb-wgc-card" style="text-decoration:none;" title="<?= htmlspecialchars($s['name'] . ' · ' . $s['brand']) ?>">
       <img src="<?= htmlspecialchars($s['image']) ?>" alt="<?= htmlspecialchars($s['name']) ?>" loading="lazy">
     </a>
     <?php endforeach; ?>

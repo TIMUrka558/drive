@@ -363,3 +363,7 @@ html body #rb-brand { position: fixed !important; }
 .rb-wgc-card { position: relative; isolation: isolate; }
 .rb-wgc-card::before { content: ""; position: absolute; inset: -12px; background: var(--bg) center / cover no-repeat; filter: blur(14px) brightness(.55); z-index: -1; }
 .rb-wgc-card img { object-fit: contain !important; background: transparent !important; position: relative; }
+/* WGC tiles: picture as-is, no crop/frame */
+.rb-wgc-card { aspect-ratio: auto !important; background: transparent !important; border: 0 !important; box-shadow: none !important; }
+.rb-wgc-card::before { content: none !important; }
+.rb-wgc-card img { width: 100% !important; height: auto !important; object-fit: initial !important; position: static !important; }

@@ -53,7 +53,7 @@ $link = fn($p, $b = null) => '/slot?' . http_build_query(array_filter(['q' => $q
   <?php else: ?>
   <div class="bw-slot-grid rb-wgc-grid" data-testid="slots-grid">
     <?php foreach ($slots as $s): ?>
-    <a href="/playslot?g=<?= urlencode($s['public_id']) ?>" class="bw-slot-card rb-wgc-card" style="text-decoration:none;--bg:url('<?= htmlspecialchars($s['image']) ?>')" data-testid="slot-card" title="<?= htmlspecialchars($s['name'] . ' · ' . $s['brand']) ?>">
+    <a href="/playslot?g=<?= urlencode($s['public_id']) ?>" class="bw-slot-card rb-wgc-card" style="text-decoration:none;" data-testid="slot-card" title="<?= htmlspecialchars($s['name'] . ' · ' . $s['brand']) ?>">
       <img src="<?= htmlspecialchars($s['image']) ?>" alt="<?= htmlspecialchars($s['name']) ?>" loading="lazy"
            onerror="this.style.cssText='width:100%;height:100%;background:linear-gradient(135deg,#e0245e 0%,#a8143f 100%);display:block'">
     </a>
