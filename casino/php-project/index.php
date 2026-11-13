@@ -97,16 +97,16 @@ setInterval(historys, 5000);
   </div>
   <div class="bw-orig-grid">
     <div class="bw-orig-card" onclick="location.href='/dice'">
-      <img src="/images/game-dice.png" alt="Dice">
+      <img src="/images/game-dice-v2.jpg" alt="Dice">
     </div>
     <div class="bw-orig-card" onclick="location.href='/x50'">
-      <img src="/images/game-x50.png" alt="x50">
+      <img src="/images/game-x50-v2.jpg" alt="x50">
     </div>
     <div class="bw-orig-card" onclick="location.href='/bubbles'">
-      <img src="/images/game-bubbles.png" alt="Bubbles">
+      <img src="/images/game-bubbles-v2.jpg" alt="Bubbles">
     </div>
     <div class="bw-orig-card" onclick="location.href='/mines'">
-      <img src="/images/game-mines.png" alt="Mines">
+      <img src="/images/game-mines-v2.jpg" alt="Mines">
     </div>
   </div>
 

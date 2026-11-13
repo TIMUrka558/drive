@@ -46,3 +46,6 @@ Download zip from Google Drive, run the user's Replit project as-is (no rewrite)
 
 ## Iteration 7 (2026-11)
 - Top bar (#shoooowd + #rb-brand logo) fixed on scroll on all pages (css/rubin-theme.css, body padding-top 60px)
+
+## Iteration 8 (2026-11)
+- Home "Оригинальные игры" cards: new user images (images/game-{dice,x50,bubbles,mines}-v2.jpg, 640px), card aspect 3:4
