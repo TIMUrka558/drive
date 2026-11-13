@@ -58,6 +58,8 @@ if ($type === 'withdraw') {
     if (!$prov[$p]) fail('Этот способ вывода пока не подключён');
     if (strlen($tg) < 5 || strlen($tg) > 15) fail('Укажите ваш числовой Telegram ID');
     if ($sum < $cfg['min_wd']) fail('Минимальная сумма вывода ' . $cfg['min_wd'] . ' ₽');
+    $wleft = round((float)$u['wager_required'] - (float)$u['wager_progress'], 2);
+    if ((float)$u['wager_required'] > 0 && $wleft > 0) fail('Сначала отыграйте вагер: осталось поставить ' . $wleft . ' ₽');
     $fee = (float)(mysql_fetch_array(mysql_query("SELECT fee_crypto FROM kot_config LIMIT 1"))['fee_crypto'] ?? 0);
     $usdt = floor($sum * (1 - $fee / 100) / $cfg['rate'] * 100) / 100;
     if ($usdt < 0.1) fail('Слишком маленькая сумма');
@@ -79,6 +81,15 @@ if ($type === 'cancelWithdraw') {
     mysql_query("UPDATE kot_user SET balance = balance + '$s' WHERE id='$uid'");
     $bal = mysql_fetch_array(mysql_query("SELECT balance FROM kot_user WHERE id='$uid'"));
     out(['success' => true, 'balance' => (float)$bal['balance']]);
+}
+
+if ($type === 'cancelWager') {
+    if ((float)$u['wager_required'] <= 0) fail('У вас нет активного вагера');
+    if ((float)$u['balance'] >= 1) fail('Отменить бонус можно, только когда на балансе меньше 1 ₽');
+    mysql_query("UPDATE kot_user SET wager_required=0, wager_progress=0, bonus=0, balance=0 WHERE id='$uid' AND balance < 1");
+    if (mysql_affected_rows() < 1) fail('Попробуйте ещё раз');
+    mysql_query("UPDATE kot_promo_act SET status='cancelled' WHERE user_id='$uid' AND status='active'");
+    out(['success' => true, 'balance' => 0]);
 }
 
 if ($type === 'dailyBonus') {

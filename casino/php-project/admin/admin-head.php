@@ -29,6 +29,7 @@ $_csrf = $_SESSION['admin_csrf'];
 
 $nav = [
     ['href' => '/admin',           'icon' => '📊', 'label' => 'Обзор'],
+    ['href' => '/admin/find',      'icon' => '🔎', 'label' => 'Поиск по ID'],
     ['href' => '/admin/users',     'icon' => '👤', 'label' => 'Игроки'],
     ['href' => '/admin/stat',      'icon' => '📈', 'label' => 'Статистика'],
     ['href' => '/admin/rtp',       'icon' => '🎰', 'label' => 'Игры / RTP'],

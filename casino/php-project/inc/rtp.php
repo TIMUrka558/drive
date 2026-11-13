@@ -58,6 +58,7 @@ function bwTrackBet($uid, $game, $bet, $won) {
         $prog = (float)$ru['wager_progress'] + $bet;
         if($prog >= (float)$ru['wager_required']){
             mysql_query("UPDATE kot_user SET wager_required=0,wager_progress=0,bonus=0 WHERE id=$uid");
+            mysql_query("UPDATE kot_promo_act SET status='done' WHERE user_id=$uid AND status='active'");
         }
     }
     // Track session losses for anti-minus

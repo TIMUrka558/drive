@@ -2054,6 +2054,12 @@ if($ban == 1) {
   $mess = "Ваш аккаунт заблокирован";
   $fa = "error";
 }
+$wgu = mysql_fetch_array(mysql_query("SELECT wager_required, wager_progress FROM kot_user WHERE id='$user_id'"));
+if($wgu && (float)$wgu['wager_required'] > (float)$wgu['wager_progress']) {
+  $error = 9;
+  $mess = "Сначала отыграйте вагер: осталось поставить " . round((float)$wgu['wager_required'] - (float)$wgu['wager_progress'], 2) . " ₽";
+  $fa = "error";
+}
   if($sum != '' && $wallet != '') {
 if(!is_numeric($sum)) {
   $error = 4;
@@ -2213,100 +2219,48 @@ $result = array(
     );
 }
 if($type == "activePromo") {
-  
-$sql_select2 = "SELECT * FROM kot_user WHERE hash='$sid'";
-$result2 = mysql_query($sql_select2);
-$row = mysql_fetch_array($result2);
-if($row)
-{
-$tp = $row['tp'];
-$bonus = $row['bonus'];
-$user_id = $row['id'];
-$ban = $row['ban'];
-$balance = $row['balance'];
-}
-// инфу о пользователе мы получили, получаем промо
-$promo = $_POST['promoactive']; // получаем введенное промо
-$sql_select = sprintf("SELECT COUNT(*) FROM kot_promo WHERE name='%s'", mysql_real_escape_string($promo));
-$result = mysql_query($sql_select);
-$row = mysql_fetch_array($result);
-if($row)
-{	
-$count = $row['COUNT(*)'];
-$timep = 600 - (time() - $tp);
-}
-if($timep > 0){
-    $error = 2;
-    $mess = "Подождите $timep секунд";
-    $fa = "error";
-}
- 
-  if($promo == '') {
-    $error = 1;
-    $mess = "Введите промокод";
-    $fa = "error";
-  }
-  if($count == 0) {
-    $error = 2;
-    $mess = "Промокод не найден";
-    $fa = "error";
-  }
- if($count != 0) {
-    $sql_select1 = "SELECT * FROM kot_promo WHERE name='$promo'";
-$result1 = mysql_query($sql_select1);
-$row = mysql_fetch_array($result1);
-if($row)
-{	
-$sum = $row['sum'];
-$limit = $row['active'];
-$actived = $row['actived'];
-$idactive = $row['id_active'];
-}
-  }
-
-  if($count == 1) {
-  if($limit == $actived || $actived > $limit) {
-    $error = 3;
-    $mess = "Активации закончились";
-    $fa = "error";
-  }
-  if($ban == 1) {
-    $error = 4;
-    $mess = "Ваш аккаунт заблокирован";
-    $fa = "error";
-  }
-  }
-  if (preg_match("/$user_id /",$idactive))  {	
-	$error = 5;
-    $mess = "Вы уже активировали этот код";
-    $fa = "error";
-   }
-  if($error == 0) {
-      $time = time();
-$newbonus = $bonus +( $sum * 8);
-    $newbalance = $balance + $sum;
-    $newactive = $actived + 1;
-    $newid = "$user_id $idactive";
-    $update_sql1 = "UPDATE kot_user SET balance = '$newbalance' WHERE hash = '$sid'";
-    mysql_query($update_sql1);
-
-  $update_sql1 = "UPDATE kot_user SET bonus = '$newbonus' WHERE hash = '$sid'";
-    mysql_query($update_sql1);
-    // обновляем бд (2)
-    $update_sql2 = "UPDATE kot_promo SET actived = '$newactive' WHERE name = '$promo'";
-    mysql_query($update_sql2); 
-    // обновляем бд (3)
-    $update_sql3 = "UPDATE kot_promo SET id_active = '$newid' WHERE name = '$promo'";
-    mysql_query($update_sql3);
-    $update_sql3 = "UPDATE kot_user SET tp = '$time' WHERE hash = '$sid'";
-    mysql_query($update_sql3);
-    $fa = "success";
-  }
-  $result = array(
-	'success' => "$fa",
-	'error' => "$mess",
-	'balance' => "$balance",
-	'new_balance' => "$newbalance"
+    $fa = "error"; $mess = ""; $balance = 0; $newbalance = 0;
+    $u = mysql_fetch_array(mysql_query("SELECT * FROM kot_user WHERE hash='" . mysql_real_escape_string($sid) . "' LIMIT 1"));
+    $code = mysql_real_escape_string(trim((string)($_POST['promoactive'] ?? '')));
+    if (!$u) $mess = "Авторизуйтесь";
+    elseif ($code === '') $mess = "Введите промокод";
+    elseif ((int)$u['ban'] === 1) $mess = "Ваш аккаунт заблокирован";
+    else {
+        $uid = (int)$u['id'];
+        $balance = $u['balance'];
+        $p = mysql_fetch_array(mysql_query("SELECT * FROM kot_promo WHERE name='$code' LIMIT 1"));
+        if (!$p) $mess = "Промокод не найден";
+        else {
+            $pid = (int)$p['id'];
+            $limit = (int)$p['active'];
+            $used = mysql_fetch_array(mysql_query("SELECT COUNT(*) c FROM kot_promo_act WHERE user_id=$uid AND promo_id=$pid"));
+            $day = mysql_fetch_array(mysql_query("SELECT COUNT(*) c FROM kot_promo_act WHERE user_id=$uid AND created_at > NOW() - INTERVAL 1 DAY"));
+            $exp = trim((string)$p['expires_at']);
+            if ($exp !== '' && strtotime($exp . ' 23:59:59') < time()) $mess = "Срок действия промокода истёк";
+            elseif ($limit > 0 && (int)$p['actived'] >= $limit) $mess = "Активации закончились";
+            elseif ((int)$used['c'] > 0 || preg_match("/(^| )$uid /", (string)$p['id_active'])) $mess = "Вы уже активировали этот код";
+            elseif ((int)$day['c'] >= 3) $mess = "Можно активировать не больше 3 промокодов за 24 часа";
+            else {
+                $minA = (float)$p['min_amount']; $maxA = (float)$p['max_amount'];
+                $amount = ($minA > 0 && $maxA >= $minA) ? random_int((int)round($minA * 100), (int)round($maxA * 100)) / 100 : round((float)$p['sum'], 2);
+                $wager = round($amount * max(1, (int)$p['wager_mult']), 2);
+                mysql_query("UPDATE kot_promo SET actived = actived + 1, id_active = CONCAT('$uid ', id_active) WHERE id=$pid AND (CAST(active AS SIGNED) = 0 OR CAST(actived AS SIGNED) < CAST(active AS SIGNED))");
+                if (mysql_affected_rows() < 1) $mess = "Активации закончились";
+                else {
+                    mysql_query("UPDATE kot_user SET balance = balance + '$amount', wager_required = wager_required + '$wager' WHERE id=$uid");
+                    mysql_query("INSERT INTO kot_promo_act (user_id, promo_id, code, amount, wager, status, created_at) VALUES ($uid, $pid, '$code', '$amount', '$wager', 'active', NOW())");
+                    $newbalance = round((float)$balance + $amount, 2);
+                    $fa = "success";
+                    $mess = "Промокод активирован: +$amount ₽, вагер $wager ₽";
+                }
+            }
+        }
+    }
+    $result = array(
+        'success' => "$fa",
+        'error' => "$mess",
+        'balance' => "$balance",
+        'new_balance' => "$newbalance"
     );
 }
 if($type == "bonus")	

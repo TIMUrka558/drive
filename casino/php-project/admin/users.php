@@ -29,7 +29,7 @@ if ($player) {
 // ── Search results ────────────────────────────────────────────────────────
 $results = [];
 if ($search !== '') {
-    $s = mysqli_real_escape_string($__conn, $search);
+    $s = mysqli_real_escape_string($__conn, ltrim($search, '#'));
     $qr = mysqli_query($__conn,
         "SELECT id, login, balance, ip, ban, admin, date_reg FROM kot_user
          WHERE id='$s' OR login LIKE '%$s%' OR ip LIKE '%$s%'
@@ -51,6 +51,9 @@ if ($player) {
     $dep = mysqli_fetch_assoc(mysqli_query($__conn, "SELECT COALESCE(SUM(p.suma),0) s FROM kot_payments p JOIN kot_user u ON u.id=p.user_id WHERE u.ref_id='$pid'"));
     $gp  = mysqli_fetch_assoc(mysqli_query($__conn, "SELECT ref_pct FROM kot_config LIMIT 1"));
     $own = mysqli_fetch_assoc(mysqli_query($__conn, "SELECT COALESCE(SUM(suma),0) s FROM kot_payments WHERE user_id='$pid'"));
+    $pa = mysqli_query($__conn, "SELECT * FROM kot_promo_act WHERE user_id='$pid' ORDER BY id DESC LIMIT 20");
+    $player_promos = [];
+    while ($r = mysqli_fetch_assoc($pa)) $player_promos[] = $r;
     $ref_info = ['count' => (int)$cnt['c'], 'deps' => (float)$dep['s'], 'global' => (float)$gp['ref_pct'], 'own_deps' => (float)$own['s']];
 }
 
@@ -186,13 +189,32 @@ $gname_map = [1 => 'Dice', 2 => 'Mines', 3 => 'Bubbles', 4 => 'X50'];
 
 </div>
 
+<div class="aw-table-wrap" style="margin-bottom:20px">
+  <div class="tw-head"><h2>Активации промокодов</h2></div>
+  <table class="aw-table" data-testid="player-promo-table">
+    <tr><th>ID</th><th>Код</th><th>Бонус</th><th>Вагер</th><th>Статус</th><th>Дата</th></tr>
+    <?php if (empty($player_promos)): ?>
+    <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Нет активаций</td></tr>
+    <?php else: foreach ($player_promos as $pp): ?>
+    <tr>
+      <td style="color:var(--muted)">#<?= (int)$pp['id'] ?></td>
+      <td style="font-family:monospace"><?= htmlspecialchars($pp['code']) ?></td>
+      <td><?= number_format((float)$pp['amount'], 2) ?> ₽</td>
+      <td><?= number_format((float)$pp['wager'], 2) ?> ₽</td>
+      <td><?= ['active' => 'Отыгрывается', 'done' => 'Отыгран', 'cancelled' => 'Отменён'][$pp['status']] ?? htmlspecialchars($pp['status']) ?></td>
+      <td style="color:var(--muted);font-size:12px"><?= htmlspecialchars($pp['created_at']) ?></td>
+    </tr>
+    <?php endforeach; endif ?>
+  </table>
+</div>
+
 <!-- Last 10 bets -->
 <div class="aw-table-wrap">
   <div class="tw-head"><h2>Last 10 bets</h2></div>
   <table class="aw-table">
-    <tr><th>Game</th><th>Type</th><th>Bet</th><th>Won</th><th>P/L</th></tr>
+    <tr><th>ID</th><th>Game</th><th>Type</th><th>Bet</th><th>Won</th><th>P/L</th></tr>
     <?php if (empty($player_bets)): ?>
-    <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No bets yet</td></tr>
+    <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No bets yet</td></tr>
     <?php else: foreach ($player_bets as $b):
       $bet = (float)$b['sum'];
       $won = (float)$b['win_summa'];
@@ -200,6 +222,7 @@ $gname_map = [1 => 'Dice', 2 => 'Mines', 3 => 'Bubbles', 4 => 'X50'];
       $gl  = $gname_map[(int)$b['game']] ?? 'Game ' . $b['game'];
     ?>
     <tr>
+      <td style="color:var(--muted)">#<?= (int)$b['id'] ?></td>
       <td><span class="badge badge-blue"><?= $gl ?></span></td>
       <td style="color:var(--muted)"><?= htmlspecialchars($b['type']) ?></td>
       <td><?= number_format($bet, 2) ?> ₽</td>

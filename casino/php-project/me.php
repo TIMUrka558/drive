@@ -29,6 +29,14 @@ $deps = mysql_query("SELECT * FROM kot_payments WHERE user_id='$id' ORDER BY id 
 
 // История выводов
 $withs = mysql_query("SELECT * FROM kot_withdraws WHERE user_id='$id' ORDER BY id DESC LIMIT 5");
+
+// Вагер
+$wg = mysql_fetch_assoc(mysql_query("SELECT balance, wager_required, wager_progress FROM kot_user WHERE id='$id'"));
+$wg_req = (float)$wg['wager_required'];
+$wg_prog = min($wg_req, (float)$wg['wager_progress']);
+$wg_pct = $wg_req > 0 ? round($wg_prog / $wg_req * 100) : 0;
+$wg_can_cancel = $wg_req > 0 && (float)$wg['balance'] < 1;
+$wg_promos = mysql_query("SELECT id, code, amount, wager, created_at FROM kot_promo_act WHERE user_id='$id' AND status='active' ORDER BY id DESC");
 ?>
 <script>
 function promo3() {
@@ -76,6 +84,7 @@ function sendMesSupport() {
     <div id="bw-ava-msg" style="font-size:11px;color:#9ca3af;margin-top:4px;font-family:'Inter',sans-serif;display:none;">Загрузка...</div>
     <div class="bw-profile-name"><?=$login?></div>
     <div class="bw-profile-since">На сайте с <?=$regdate?></div>
+    <div class="bw-profile-since" data-testid="profile-user-id">Ваш ID: <b style="color:#fff">#<?=(int)$id?></b></div>
     <div class="bw-profile-actions">
       <a href="/deposit" class="bw-btn bw-btn-primary bw-btn-sm">
         <span class="material-icons" style="font-size:16px;">account_balance_wallet</span>
@@ -91,6 +100,28 @@ function sendMesSupport() {
       </a>
     </div>
   </div>
+
+  <?php if ($wg_req > 0): ?>
+  <!-- Вагер -->
+  <div class="bw-section-title">Активный вагер</div>
+  <div class="bw-card" data-testid="profile-wager-card" style="padding:16px;">
+    <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;">
+      <span style="color:var(--muted);">Отыграно</span>
+      <b data-testid="profile-wager-progress"><?=number_format($wg_prog, 2, '.', ' ')?> / <?=number_format($wg_req, 2, '.', ' ')?> ₽</b>
+    </div>
+    <div style="height:8px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;">
+      <div style="height:100%;width:<?=$wg_pct?>%;background:linear-gradient(90deg,#e0245e,#ff5c8a);"></div>
+    </div>
+    <?php while ($wp = mysql_fetch_assoc($wg_promos)): ?>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;">Промокод <b style="color:#fff"><?=htmlspecialchars($wp['code'])?></b> · +<?=(float)$wp['amount']?> ₽ · вагер <?=(float)$wp['wager']?> ₽ · ID #<?=(int)$wp['id']?></div>
+    <?php endwhile; ?>
+    <div style="font-size:12px;color:var(--muted);margin:12px 0;">Пока вагер не отыгран, вывод недоступен. Если баланс закончился (меньше 1 ₽), бонус и вагер можно отменить.</div>
+    <button class="bw-btn bw-btn-secondary bw-btn-sm" data-testid="profile-cancel-wager-btn" onclick="bwCancelWager()" <?=$wg_can_cancel ? '' : 'disabled style="opacity:.5;cursor:not-allowed;"'?>>
+      <span class="material-icons" style="font-size:16px;">block</span> Отменить бонус и вагер
+    </button>
+    <div id="bw-wager-msg" data-testid="profile-cancel-wager-msg" style="font-size:12px;margin-top:8px;display:none;"></div>
+  </div>
+  <?php endif; ?>
 
   <!-- Статистика -->
   <div class="bw-section-title">Статистика</div>
@@ -119,6 +150,7 @@ function sendMesSupport() {
     <table style="width:100%;border-collapse:collapse;">
       <thead>
         <tr style="background:var(--blue-xs);">
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">ID</th>
           <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Сумма</th>
           <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Метод</th>
           <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Дата</th>
@@ -132,6 +164,7 @@ function sendMesSupport() {
             $dep_count++;
             ?>
             <tr style="border-top:1px solid var(--border);">
+              <td style="padding:12px 14px;font-size:12px;color:var(--muted);">#<?=(int)$dep_row['id']?></td>
               <td style="padding:12px 14px;font-weight:700;color:var(--green);">+<?=htmlspecialchars($dep_row['suma'])?> р</td>
               <td style="padding:12px 14px;font-size:13px;color:var(--muted);"><?=htmlspecialchars($dep_row['qiwi'] ?: $dep_row['transaction'])?></td>
               <td style="padding:12px 14px;font-size:12px;color:var(--muted);text-align:right;"><?=htmlspecialchars($dep_row['data'])?></td>
@@ -141,7 +174,7 @@ function sendMesSupport() {
         }
         if ($dep_count == 0):
         ?>
-        <tr><td colspan="3" style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Пополнений пока нет</td></tr>
+        <tr><td colspan="4" style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Пополнений пока нет</td></tr>
         <?php endif; ?>
       </tbody>
     </table>
@@ -153,6 +186,7 @@ function sendMesSupport() {
     <table style="width:100%;border-collapse:collapse;">
       <thead>
         <tr style="background:var(--blue-xs);">
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">ID</th>
           <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Сумма</th>
           <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Способ</th>
           <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Статус</th>
@@ -164,10 +198,11 @@ function sendMesSupport() {
         if ($withs) {
           while ($with_row = mysql_fetch_assoc($withs)) {
             $with_count++;
-            $status_text = $with_row['status'] == '1' ? 'Выплачен' : 'В обработке';
-            $status_color = $with_row['status'] == '1' ? 'var(--green)' : 'var(--gold)';
+            $status_text = $with_row['status'] == '1' ? 'Выплачен' : ($with_row['status'] == '2' ? 'Отменён' : 'В обработке');
+            $status_color = $with_row['status'] == '1' ? 'var(--green)' : ($with_row['status'] == '2' ? 'var(--red)' : 'var(--gold)');
             ?>
             <tr style="border-top:1px solid var(--border);">
+              <td style="padding:12px 14px;font-size:12px;color:var(--muted);">#<?=(int)$with_row['id']?></td>
               <td style="padding:12px 14px;font-weight:700;color:var(--red);">-<?=htmlspecialchars($with_row['sum'])?> р</td>
               <td style="padding:12px 14px;font-size:13px;color:var(--muted);"><?=htmlspecialchars($with_row['ps'])?></td>
               <td style="padding:12px 14px;text-align:right;font-size:12px;font-weight:600;color:<?=$status_color?>;"><?=$status_text?></td>
@@ -177,7 +212,7 @@ function sendMesSupport() {
         }
         if ($with_count == 0):
         ?>
-        <tr><td colspan="3" style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Выводов пока нет</td></tr>
+        <tr><td colspan="4" style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">Выводов пока нет</td></tr>
         <?php endif; ?>
       </tbody>
     </table>
@@ -192,6 +227,16 @@ require ("components/footer.php");
 ?>
 <script>
 history.pushState(null, null, window.location.pathname.split("?")[0]);
+
+function bwCancelWager() {
+  if (!confirm('Отменить бонус и вагер? Остаток баланса меньше 1 ₽ будет списан.')) return;
+  var msg = document.getElementById('bw-wager-msg');
+  $.post('/payapi.php', { type: 'cancelWager' }, function(d) {
+    msg.style.display = 'block';
+    if (d.success) { msg.style.color = 'var(--green)'; msg.textContent = 'Бонус и вагер отменены'; setTimeout(function(){ location.reload(); }, 900); }
+    else { msg.style.color = 'var(--red)'; msg.textContent = d.error || 'Ошибка'; }
+  }, 'json');
+}
 
 function bwUploadAva(input) {
   if (!input.files || !input.files[0]) return;

@@ -20,8 +20,8 @@ $filter = $_GET['status'] ?? 'all';
 
 $where_parts = [];
 if ($search !== '') {
-    $s = mysqli_real_escape_string($__conn, $search);
-    $where_parts[] = "(w.user_id='$s' OR u.login LIKE '%$s%' OR w.login_fake LIKE '%$s%')";
+    $s = mysqli_real_escape_string($__conn, ltrim($search, '#'));
+    $where_parts[] = "(w.id='$s' OR w.user_id='$s' OR u.login LIKE '%$s%' OR w.login_fake LIKE '%$s%')";
 }
 if ($filter === 'pending')   $where_parts[] = "w.status='0'";
 if ($filter === 'confirmed') $where_parts[] = "w.status='1'";
@@ -52,7 +52,7 @@ $pending_count = (int) mysqli_fetch_assoc(mysqli_query($__conn,
 <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
   <form method="get" style="display:flex;gap:8px;flex-wrap:wrap">
     <input name="q" value="<?= htmlspecialchars($search) ?>" class="form-control"
-           style="width:220px" placeholder="Login / ID…">
+           style="width:220px" placeholder="ID вывода, ID игрока, логин…">
     <select name="status" class="form-control" style="width:160px">
       <option value="all"       <?= $filter === 'all'       ? 'selected' : '' ?>>All statuses</option>
       <option value="pending"   <?= $filter === 'pending'   ? 'selected' : '' ?>>Pending (<?= $pending_count ?>)</option>
@@ -70,7 +70,7 @@ $pending_count = (int) mysqli_fetch_assoc(mysqli_query($__conn,
 <div class="aw-table-wrap">
   <div class="tw-head"><h2>Withdrawals</h2></div>
   <table class="aw-table">
-    <tr><th>ID</th><th>Player</th><th>Amount</th><th>Wallet</th><th>Method</th><th>Status</th><th>Date</th><th>Action</th></tr>
+    <tr><th>ID вывода</th><th>Player</th><th>Amount</th><th>Wallet</th><th>Method</th><th>Status</th><th>Date</th><th>Action</th></tr>
     <?php if (empty($wds)): ?>
     <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">No withdrawals</td></tr>
     <?php else: foreach ($wds as $w):
@@ -85,7 +85,7 @@ $pending_count = (int) mysqli_fetch_assoc(mysqli_query($__conn,
     ?>
     <tr>
       <td style="color:var(--muted)">#<?= (int)$w['id'] ?></td>
-      <td><a href="/admin/users?uid=<?= (int)$w['user_id'] ?>"><?= $display_login ?></a></td>
+      <td><a href="/admin/users?uid=<?= (int)$w['user_id'] ?>"><?= $display_login ?> #<?= (int)$w['user_id'] ?></a></td>
       <td><strong><?= number_format((float)$w['sum'], 2) ?> ₽</strong><?php if (!empty($w['amount_crypto'])): ?><br><small style="color:var(--muted)"><?= (float)$w['amount_crypto'] ?> USDT</small><?php endif ?></td>
       <td style="font-size:12px;color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis">
         <?= htmlspecialchars($w['wallet'] ?? '—') ?>

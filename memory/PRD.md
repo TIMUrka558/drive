@@ -32,3 +32,9 @@ Download zip from Google Drive, run the user's Replit project as-is (no rewrite)
 - Project restored into new environment: casino/ folder pulled from old env (GitHub repo had it only as an empty gitlink), DB datadir + dump_all.sql (full mysqldump) included
 - Site running in preview via /app/casino/start-emergent.sh (PHP 8.2 + MySQL 8.0.46); casino/ now a normal folder (no nested .git), no files >90MB
 - Pending: CRYPTOBOT_TOKEN, XROCKET_TOKEN not set yet (user will add later)
+
+## Iteration 5 (2026-11)
+- Promo activation rewritten (action.php activePromo): per-promo activation limit (0=unlimited), wager = bonus × wager_mult added to wager_required, random amount range, expiry, max 3 promo activations per player per 24h, log in new table kot_promo_act
+- Profile /me: player ID shown, active wager card (progress, promos) + "Отменить бонус и вагер" (payapi cancelWager, allowed when balance < 1 ₽; zeroes wager & balance)
+- Withdraw blocked while wager not completed (payapi withdraw + legacy withdrawuser)
+- Admin: promo page in Russian with activations log + search; new /admin/find global search by ID (players, deposits, invoices, withdrawals, promo activations, bets); deposits/withdrawals searchable by record ID; player page shows promo activations and bet IDs

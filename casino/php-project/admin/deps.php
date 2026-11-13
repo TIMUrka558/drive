@@ -17,8 +17,8 @@ $search = trim($_GET['q'] ?? '');
 
 $where = '';
 if ($search !== '') {
-    $s     = mysqli_real_escape_string($__conn, $search);
-    $where = "WHERE p.user_id='$s' OR u.login LIKE '%$s%'";
+    $s     = mysqli_real_escape_string($__conn, ltrim($search, '#'));
+    $where = "WHERE p.id='$s' OR p.user_id='$s' OR p.transaction='$s' OR u.login LIKE '%$s%'";
 }
 
 $total = (int) mysqli_fetch_assoc(mysqli_query($__conn,
@@ -45,7 +45,7 @@ $total_sum = number_format((float)$sum_r['s'], 2);
 <div style="display:flex;gap:12px;margin-bottom:20px;align-items:center;flex-wrap:wrap">
   <form method="get" style="display:flex;gap:8px">
     <input name="q" value="<?= htmlspecialchars($search) ?>" class="form-control"
-           style="width:280px" placeholder="Search by player ID or login…">
+           style="width:280px" placeholder="ID депозита, ID игрока, логин, транзакция…">
     <button class="btn btn-primary">Search</button>
     <?php if ($search): ?><a href="/admin/deps" class="btn btn-ghost">Clear</a><?php endif ?>
   </form>
@@ -57,14 +57,14 @@ $total_sum = number_format((float)$sum_r['s'], 2);
 <div class="aw-table-wrap">
   <div class="tw-head"><h2>Deposits (kot_payments)</h2></div>
   <table class="aw-table">
-    <tr><th>ID</th><th>Player</th><th>Amount</th><th>QIWI / Wallet</th><th>Transaction</th><th>Date</th></tr>
+    <tr><th>ID депозита</th><th>Player</th><th>Amount</th><th>QIWI / Wallet</th><th>Transaction</th><th>Date</th></tr>
     <?php if (empty($rows)): ?>
     <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No deposits found</td></tr>
     <?php else: foreach ($rows as $d): ?>
     <tr>
       <td style="color:var(--muted)">#<?= (int)$d['id'] ?></td>
       <td><a href="/admin/users?uid=<?= (int)$d['user_id'] ?>">
-        <?= htmlspecialchars($d['login'] ?? '#'.$d['user_id']) ?>
+        <?= htmlspecialchars($d['login'] ?? '') ?> #<?= (int)$d['user_id'] ?>
       </a></td>
       <td><strong><?= number_format((float)$d['suma'], 2) ?> ₽</strong></td>
       <td style="color:var(--muted);font-size:12px"><?= htmlspecialchars($d['qiwi'] ?? '—') ?></td>

@@ -116,6 +116,7 @@ elseif ($type === 'manualDep') {
 elseif ($type === 'resetWager') {
     $uid = (int)($_POST['hashuser'] ?? 0);
     q($__conn, "UPDATE kot_user SET wager_required=0, wager_progress=0, bonus=0 WHERE id=$uid");
+    q($__conn, "UPDATE kot_promo_act SET status='cancelled' WHERE user_id=$uid AND status='active'");
     $result = ['success' => 'success'];
 }
 

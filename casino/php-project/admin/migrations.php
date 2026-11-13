@@ -95,6 +95,19 @@ $migrations = [
     ['kot_promo.expires_at', 'kot_promo','expires_at', "VARCHAR(50) NOT NULL DEFAULT ''"],
 ];
 
+mysqli_query($__conn, "CREATE TABLE IF NOT EXISTS kot_promo_act (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    promo_id INT NOT NULL,
+    code VARCHAR(50) NOT NULL,
+    amount DECIMAL(12,2) NOT NULL DEFAULT 0,
+    wager DECIMAL(12,2) NOT NULL DEFAULT 0,
+    status VARCHAR(12) NOT NULL DEFAULT 'active',
+    created_at DATETIME NOT NULL,
+    KEY user_time (user_id, created_at),
+    KEY promo (promo_id)
+)");
+
 echo "FastWin DB Migrations\n";
 echo str_repeat('-', 40)."\n";
 foreach ($migrations as [$label, $table, $column, $def]) {
